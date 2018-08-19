@@ -1,8 +1,7 @@
 #include "immersivepch.h"
 #include "immersive.h"
-#include "../../game/Server/SharedDefines.h"
+#include "SharedDefines.h"
 #include "ImmersiveConfig.h"
-#include "ImmersiveServer.h"
 
 #ifdef ENABLE_PLAYERBOTS
 #include "../Bots/playerbot/PlayerbotAIConfig.h"
@@ -65,7 +64,6 @@ Immersive::Immersive()
     statNames[STAT_SPIRIT] = "SPI";
 
     sImmersiveConfig.Initialize();
-    sImmersiveServer.Start();
 }
 
 void Immersive::GetPlayerLevelInfo(Player *player, PlayerLevelInfo* info)

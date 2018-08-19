@@ -1,7 +1,7 @@
 -- backup
-create table one_world.creature_template_backup 
+create table creature_template_backup 
+SELECT * FROM creature_template where TrainerTemplateId <> 0 and TrainerClass <> 0 and GossipMenuId = 0;
 
-update one_world.creature_template set GossipMenuId = 4537 where entry in (select entry from one_world.creature_template_backup);
 -- cleanup
 DELETE FROM `gossip_menu` where entry > 60000;
 DELETE FROM `gossip_menu_option` where menu_id in (60000, 60001, 60002);
@@ -52,4 +52,4 @@ INSERT INTO `gossip_menu_option`
 SELECT menu_id, 61, 3, 'Manage attributes', 1, 16, 60001, 0, 0, 0, 0, '', 0 FROM `gossip_menu_option` where `action_menu_id` = 4461;
 
 -- add missing gossips to trainers
-SELECT * FROM one_world.creature_template where TrainerTemplateId <> 0 and TrainerClass <> 0 and GossipMenuId = 0;
+update creature_template set GossipMenuId = 4537 where entry in (select entry from one_world.creature_template_backup);

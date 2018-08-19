@@ -1,5 +1,5 @@
 #pragma once
-#include "../../game/WorldHandlers/GossipDef.h"
+#include "GossipDef.h"
 
 using namespace std;
 
