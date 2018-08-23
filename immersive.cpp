@@ -318,7 +318,7 @@ void Immersive::OnGiveXP(Player *player, uint32 xp, Unit* victim)
     uint32 botXp = (uint32) (bonus_xp * sImmersiveConfig.sharedXpPercent / 100.0f);
     if (botXp < 1) return;
 
-    ostringstream out;
+    ostringstream out; out << "|cffa0a0ff";
     bool first = true;
     for (PlayerBotMap::const_iterator i = player->GetPlayerbotMgr()->GetPlayerBotsBegin(); i != player->GetPlayerbotMgr()->GetPlayerBotsEnd(); ++i)
     {
@@ -332,7 +332,7 @@ void Immersive::OnGiveXP(Player *player, uint32 xp, Unit* victim)
     }
 
     if (out.str().empty()) return;
-    out << ": " << botXp << " experience gained";
+    out << "|cffa0a0ff: " << botXp << " experience gained";
     SendMessage(player, out.str());
 }
 
@@ -343,7 +343,7 @@ void Immersive::OnReputationChange(Player* player, FactionEntry const* factionEn
     int32 botXp = (uint32) (standing * sImmersiveConfig.sharedRepPercent / 100.0f);
     if (botXp < 1) return;
 
-    ostringstream out;
+    ostringstream out; out << "|cffa0a0ff";
     bool first = true;
     for (PlayerBotMap::const_iterator i = player->GetPlayerbotMgr()->GetPlayerBotsBegin(); i != player->GetPlayerbotMgr()->GetPlayerBotsEnd(); ++i)
     {
@@ -357,7 +357,35 @@ void Immersive::OnReputationChange(Player* player, FactionEntry const* factionEn
     }
 
     if (out.str().empty()) return;
-    out << ": " << botXp << " reputation gained";
+    out << "|cffa0a0ff: " << botXp << " reputation gained";
+    SendMessage(player, out.str());
+}
+
+void Immersive::OnRewardQuest(Player* player, Quest const* quest)
+{
+    if (!sImmersiveConfig.sharedQuests || !player->GetPlayerbotMgr()) return;
+    if (!quest || quest->IsRepeatable()) return;
+
+    uint32 questId = quest->GetQuestId();
+    ostringstream out; out << "|cffa0a0ff";
+    bool first = true;
+    for (PlayerBotMap::const_iterator i = player->GetPlayerbotMgr()->GetPlayerBotsBegin(); i != player->GetPlayerbotMgr()->GetPlayerBotsEnd(); ++i)
+    {
+        Player *bot = i->second;
+        if (!bot->GetGroup() && bot->GetQuestStatus(questId) == QUEST_STATUS_NONE)
+        {
+            bot->SetQuestStatus(questId, QUEST_STATUS_COMPLETE);
+            QuestStatusData& sd = bot->getQuestStatusMap()[questId];
+            sd.m_explored = true;
+            sd.m_rewarded = true;
+            sd.uState = (sd.uState != QUEST_NEW) ? QUEST_CHANGED : QUEST_NEW;
+            if (!first)  out << ", "; else first = false;
+            out << bot->GetName();
+        }
+    }
+
+    if (out.str().empty()) return;
+    out << "|cffa0a0ff: " << quest->GetTitle().c_str() << " completed";
     SendMessage(player, out.str());
 }
 

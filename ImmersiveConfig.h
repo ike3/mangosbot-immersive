@@ -19,6 +19,7 @@ public:
     bool manualAttributes;
     float sharedXpPercent;
     float sharedRepPercent;
+    bool sharedQuests;
 
 private:
     Config config;

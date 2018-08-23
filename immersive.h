@@ -17,6 +17,7 @@ namespace immersive
         static void OnDeath(Player *player);
         static void OnGiveXP(Player *player, uint32 xp, Unit* victim);
         static void OnReputationChange(Player* player, FactionEntry const* factionEntry, int32& standing, bool incremental);
+        static void OnRewardQuest(Player* player, Quest const* quest);
 
     private:
         static void PrintHelp(Player *player, bool detailed = false);
