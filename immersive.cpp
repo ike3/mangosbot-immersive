@@ -310,6 +310,55 @@ void Immersive::SendMessage(Player *player, string message)
     chat.PSendSysMessage(message.c_str());
 }
 
+
+void Immersive::RunAction(Player* player, ImmersiveAction* action)
+{
+    bool first = true, needMsg = false;
+    ostringstream out; out << "|cffa0a0ff";
+#ifdef ENABLE_PLAYERBOTS
+    for (PlayerBotMap::const_iterator i = player->GetPlayerbotMgr()->GetPlayerBotsBegin(); i != player->GetPlayerbotMgr()->GetPlayerBotsEnd(); ++i)
+    {
+        Player *bot = i->second;
+        if (!bot->GetGroup() && action->Run(player, bot))
+        {
+            if (!first)  out << ", "; else first = false;
+            out << bot->GetName();
+            needMsg = true;
+        }
+    }
+#endif
+
+    if (!needMsg) return;
+    out << "|cffa0a0ff: " << action->GetMessage();
+    SendMessage(player, out.str());
+}
+
+class OnGiveXPAction : public ImmersiveAction
+{
+public:
+    OnGiveXPAction(int32 value) : ImmersiveAction(), value(value) {}
+
+    virtual bool Run(Player* player, Player* bot)
+    {
+        if ((int)player->getLevel() - (int)bot->getLevel() > 1)
+        {
+            bot->GiveXP(value, NULL);
+            return true;
+        }
+        return false;
+    }
+
+    virtual string GetMessage()
+    {
+        ostringstream out;
+        out << value << " experience gained";
+        return out.str();
+    }
+
+private:
+    int32 value;
+};
+
 void Immersive::OnGiveXP(Player *player, uint32 xp, Unit* victim)
 {
     if (sImmersiveConfig.sharedXpPercent < 0.01f || !player->GetPlayerbotMgr()) return;
@@ -318,75 +367,81 @@ void Immersive::OnGiveXP(Player *player, uint32 xp, Unit* victim)
     uint32 botXp = (uint32) (bonus_xp * sImmersiveConfig.sharedXpPercent / 100.0f);
     if (botXp < 1) return;
 
-    ostringstream out; out << "|cffa0a0ff";
-    bool first = true;
-    for (PlayerBotMap::const_iterator i = player->GetPlayerbotMgr()->GetPlayerBotsBegin(); i != player->GetPlayerbotMgr()->GetPlayerBotsEnd(); ++i)
+    OnGiveXPAction action(botXp);
+    RunAction(player, &action);
+}
+
+class OnReputationChangeAction : public ImmersiveAction
+{
+public:
+    OnReputationChangeAction(FactionEntry const* factionEntry, int32 value) : ImmersiveAction(), factionEntry(factionEntry), value(value) {}
+
+    virtual bool Run(Player* player, Player* bot)
     {
-        Player *bot = i->second;
-        if (!bot->GetGroup() && (int)player->getLevel() - (int)bot->getLevel() > 1)
-        {
-            bot->GiveXP(botXp, NULL);
-            if (!first)  out << ", "; else first = false;
-            out << bot->GetName();
-        }
+        bot->GetReputationMgr().ModifyReputation(factionEntry, value);
+        return true;
     }
 
-    if (out.str().empty()) return;
-    out << "|cffa0a0ff: " << botXp << " experience gained";
-    SendMessage(player, out.str());
-}
+    virtual string GetMessage()
+    {
+        ostringstream out;
+        out << value << " reputation gained";
+        return out.str();
+    }
+
+private:
+    FactionEntry const* factionEntry;
+    int32 value;
+};
 
 void Immersive::OnReputationChange(Player* player, FactionEntry const* factionEntry, int32& standing, bool incremental)
 {
     if (sImmersiveConfig.sharedRepPercent < 0.01f || !player->GetPlayerbotMgr() || !incremental) return;
 
-    int32 botXp = (uint32) (standing * sImmersiveConfig.sharedRepPercent / 100.0f);
-    if (botXp < 1) return;
+    int32 value = (uint32) (standing * sImmersiveConfig.sharedRepPercent / 100.0f);
+    if (value < 1) return;
 
-    ostringstream out; out << "|cffa0a0ff";
-    bool first = true;
-    for (PlayerBotMap::const_iterator i = player->GetPlayerbotMgr()->GetPlayerBotsBegin(); i != player->GetPlayerbotMgr()->GetPlayerBotsEnd(); ++i)
+    OnReputationChangeAction action(factionEntry, value);
+    RunAction(player, &action);
+}
+
+class OnRewardQuestAction : public ImmersiveAction
+{
+public:
+    OnRewardQuestAction(Quest const* quest) : ImmersiveAction(), quest(quest) {}
+
+    virtual bool Run(Player* player, Player* bot)
     {
-        Player *bot = i->second;
-        if (!bot->GetGroup())
-        {
-            bot->GetReputationMgr().ModifyReputation(factionEntry, standing);
-            if (!first)  out << ", "; else first = false;
-            out << bot->GetName();
-        }
+        uint32 questId = quest->GetQuestId();
+        if (bot->GetQuestStatus(questId) != QUEST_STATUS_NONE)
+            return false;
+
+        bot->SetQuestStatus(questId, QUEST_STATUS_COMPLETE);
+        QuestStatusData& sd = bot->getQuestStatusMap()[questId];
+        sd.m_explored = true;
+        sd.m_rewarded = true;
+        sd.uState = (sd.uState != QUEST_NEW) ? QUEST_CHANGED : QUEST_NEW;
+        return true;
     }
 
-    if (out.str().empty()) return;
-    out << "|cffa0a0ff: " << botXp << " reputation gained";
-    SendMessage(player, out.str());
-}
+    virtual string GetMessage()
+    {
+        ostringstream out;
+        out << quest->GetTitle().c_str() << " completed";
+        return out.str();
+    }
+
+private:
+    Quest const* quest;
+};
 
 void Immersive::OnRewardQuest(Player* player, Quest const* quest)
 {
     if (!sImmersiveConfig.sharedQuests || !player->GetPlayerbotMgr()) return;
     if (!quest || quest->IsRepeatable()) return;
 
-    uint32 questId = quest->GetQuestId();
-    ostringstream out; out << "|cffa0a0ff";
-    bool first = true;
-    for (PlayerBotMap::const_iterator i = player->GetPlayerbotMgr()->GetPlayerBotsBegin(); i != player->GetPlayerbotMgr()->GetPlayerBotsEnd(); ++i)
-    {
-        Player *bot = i->second;
-        if (!bot->GetGroup() && bot->GetQuestStatus(questId) == QUEST_STATUS_NONE)
-        {
-            bot->SetQuestStatus(questId, QUEST_STATUS_COMPLETE);
-            QuestStatusData& sd = bot->getQuestStatusMap()[questId];
-            sd.m_explored = true;
-            sd.m_rewarded = true;
-            sd.uState = (sd.uState != QUEST_NEW) ? QUEST_CHANGED : QUEST_NEW;
-            if (!first)  out << ", "; else first = false;
-            out << bot->GetName();
-        }
-    }
-
-    if (out.str().empty()) return;
-    out << "|cffa0a0ff: " << quest->GetTitle().c_str() << " completed";
-    SendMessage(player, out.str());
+    OnRewardQuestAction action(quest);
+    RunAction(player, &action);
 }
 
 INSTANTIATE_SINGLETON_1( immersive::Immersive );

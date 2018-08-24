@@ -5,34 +5,47 @@ using namespace std;
 
 namespace immersive
 {
+    class ImmersiveAction
+    {
+    public:
+        ImmersiveAction() {}
+
+    public:
+        virtual bool Run(Player* player, Player* bot) = 0;
+        virtual string GetMessage() = 0;
+    };
+
     class Immersive
     {
     public:
         Immersive();
 
     public:
-        static void GetPlayerLevelInfo(Player *player, PlayerLevelInfo* info);
-        static void OnGossipSelect(Player *player, uint32 gossipListId, GossipMenuItemData *menuData);
-        static float GetFallDamage(float zdist);
-        static void OnDeath(Player *player);
-        static void OnGiveXP(Player *player, uint32 xp, Unit* victim);
-        static void OnReputationChange(Player* player, FactionEntry const* factionEntry, int32& standing, bool incremental);
-        static void OnRewardQuest(Player* player, Quest const* quest);
+        void GetPlayerLevelInfo(Player *player, PlayerLevelInfo* info);
+        void OnGossipSelect(Player *player, uint32 gossipListId, GossipMenuItemData *menuData);
+        float GetFallDamage(float zdist);
+        void OnDeath(Player *player);
+        void OnGiveXP(Player *player, uint32 xp, Unit* victim);
+        void OnReputationChange(Player* player, FactionEntry const* factionEntry, int32& standing, bool incremental);
+        void OnRewardQuest(Player* player, Quest const* quest);
 
     private:
-        static void PrintHelp(Player *player, bool detailed = false);
-        static void IncreaseStat(Player *player, uint32 type);
-        static void ResetStats(Player *player);
-        static void SendMessage(Player *player, string message);
+        void PrintHelp(Player *player, bool detailed = false);
+        void IncreaseStat(Player *player, uint32 type);
+        void ResetStats(Player *player);
+        void SendMessage(Player *player, string message);
 
     private:
-        static uint32 GetTotalStats(Player *player);
-        static uint32 GetUsedStats(Player *player);
-        static uint32 GetStatCost(Player *player);
+        uint32 GetTotalStats(Player *player);
+        uint32 GetUsedStats(Player *player);
+        uint32 GetStatCost(Player *player);
 
     private:
-        static uint32 GetValue(uint32 owner, string type);
-        static uint32 SetValue(uint32 owner, string type, uint32 value);
+        void RunAction(Player* player, ImmersiveAction* action);
+
+    private:
+        uint32 GetValue(uint32 owner, string type);
+        uint32 SetValue(uint32 owner, string type, uint32 value);
 
     private:
         static map<Stats, string> statValues;
