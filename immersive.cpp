@@ -412,6 +412,9 @@ public:
 
     virtual bool Run(Player* player, Player* bot)
     {
+        if (quest->GetRequiredClasses())
+            return false;
+
         uint32 questId = quest->GetQuestId();
         if (bot->GetQuestStatus(questId) != QUEST_STATUS_NONE)
             return false;
