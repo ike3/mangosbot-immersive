@@ -343,6 +343,9 @@ public:
         if ((int)player->getLevel() - (int)bot->getLevel() > 1)
         {
             bot->GiveXP(value, NULL);
+            Pet *pet = bot->GetPet();
+            if (pet && pet->getPetType() == HUNTER_PET)
+                pet->GivePetXP(value);
             return true;
         }
         return false;
