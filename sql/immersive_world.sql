@@ -1,4 +1,5 @@
 -- backup
+drop table if exists creature_template_backup;
 create table creature_template_backup 
 SELECT * FROM creature_template where TrainerTemplateId <> 0 and TrainerClass <> 0 and GossipMenuId = 0;
 
