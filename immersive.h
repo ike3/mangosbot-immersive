@@ -28,6 +28,7 @@ namespace immersive
         void OnGiveXP(Player *player, uint32 xp, Unit* victim);
         void OnReputationChange(Player* player, FactionEntry const* factionEntry, int32& standing, bool incremental);
         void OnRewardQuest(Player* player, Quest const* quest);
+        bool OnFishing(Player* player, bool success);
 
     private:
         void PrintHelp(Player *player, bool detailed = false);

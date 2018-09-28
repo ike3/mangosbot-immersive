@@ -1,5 +1,7 @@
 #include "immersivepch.h"
 #include "immersive.h"
+
+#include "../Bots/playerbot/ServerFacade.h"
 #include "SharedDefines.h"
 #include "ImmersiveConfig.h"
 
@@ -448,6 +450,41 @@ void Immersive::OnRewardQuest(Player* player, Quest const* quest)
 
     OnRewardQuestAction action(quest);
     RunAction(player, &action);
+}
+
+bool Immersive::OnFishing(Player* player, bool success)
+{
+    if (!success || !sImmersiveConfig.fishingBaubles || !player->GetPlayerbotMgr()) return success;
+
+    Item* const item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+    if (!item) return false;
+
+    uint32 eId = item->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT);
+    uint32 eDuration = item->GetEnchantmentDuration(TEMP_ENCHANTMENT_SLOT);
+    if (!eDuration) return false;
+
+    SpellItemEnchantmentEntry const* pEnchant = sSpellItemEnchantmentStore.LookupEntry(eId);
+    if (!pEnchant)
+        return false;
+
+    for (int s = 0; s < 3; ++s)
+    {
+        uint32 spellId = pEnchant->spellid[s];
+        if (pEnchant->type[s] == ITEM_ENCHANTMENT_TYPE_EQUIP_SPELL && spellId)
+        {
+            SpellEntry const *entry = sServerFacade.LookupSpellInfo(spellId);
+            if (entry)
+            {
+                for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
+                {
+                    if (entry->Effect[i] == SPELL_EFFECT_APPLY_AURA && entry->EffectMiscValue[i] == SKILL_FISHING)
+                        return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 INSTANTIATE_SINGLETON_1( immersive::Immersive );
