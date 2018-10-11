@@ -82,8 +82,12 @@ void Immersive::GetPlayerLevelInfo(Player *player, PlayerLevelInfo* info)
     *info = playerInfo->levelInfo[0];
 
     uint32 owner = player->GetObjectGuid().GetRawValue();
+    int modifier = GetValue(owner, "modifier");
+    if (!modifier) modifier = 100;
     for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
-        info->stats[i] += GetValue(owner, Immersive::statValues[(Stats)i]);
+    {
+        info->stats[i] += GetValue(owner, Immersive::statValues[(Stats)i]) * modifier / 100;
+    }
 }
 
 void Immersive::OnGossipSelect(Player *player, uint32 gossipListId, GossipMenuItemData *menuData)
@@ -103,6 +107,17 @@ void Immersive::OnGossipSelect(Player *player, uint32 gossipListId, GossipMenuIt
     case 6:
         ResetStats(player);
         break;
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 18:
+    case 19:
+    case 20:
+        ChangeModifier(player, menuData->m_gAction_poi - 11);
     }
 }
 
@@ -157,6 +172,11 @@ void Immersive::OnDeath(Player *player)
     player->UpdateAllStats();
 }
 
+string percent(Player *player)
+{
+    return player->GetPlayerbotAI() ? "%" : "%%";
+}
+
 void Immersive::PrintHelp(Player *player, bool detailed)
 {
     uint32 owner = player->GetObjectGuid().GetRawValue();
@@ -177,17 +197,36 @@ void Immersive::PrintHelp(Player *player, bool detailed)
         out << "|cffa0a0ffUsed: ";
         bool first = true;
         bool used = false;
+        uint32 modifier = GetValue(owner, "modifier");
+        if (!modifier) modifier = 100;
         for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
         {
-            uint32 value = GetValue(owner, statValues[(Stats)i]);
+            uint32 value = GetValue(owner, statValues[(Stats)i]) * modifier / 100;
             if (!value) continue;
             if (!first) out << ", "; else first = false;
             out << "|cff00ff00+" << value << "|cffa0a0ff " << statNames[(Stats)i];
             used = true;
         }
+
+        if (modifier != 100) out << " (|cff00ff00" << modifier << percent(player) << "|cffa0a0ff modifier)";
         if (used)
             SendMessage(player, out.str().c_str());
     }
+}
+
+void Immersive::ChangeModifier(Player *player, uint32 type)
+{
+    uint32 owner = player->GetObjectGuid().GetRawValue();
+    uint32 value = type * 10;
+    SetValue(owner, "modifier", value);
+
+    ostringstream out;
+    out << "|cffa0a0ffYou have changed your attribute modifier to |cff00ff00" << value << percent(player) << "|cffa0a0ff";
+    if (!value || value == 100) out << " (disabled)";
+    SendMessage(player, out.str());
+
+    player->InitStatsForLevel(true);
+    player->UpdateAllStats();
 }
 
 void Immersive::IncreaseStat(Player *player, uint32 type)

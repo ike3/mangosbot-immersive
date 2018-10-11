@@ -5,7 +5,7 @@ SELECT * FROM creature_template where TrainerTemplateId <> 0 and TrainerClass <>
 
 -- cleanup
 DELETE FROM `gossip_menu` where entry > 60000;
-DELETE FROM `gossip_menu_option` where menu_id in (60000, 60001, 60002);
+DELETE FROM `gossip_menu_option` where menu_id in (60000, 60001, 60002, 60003, 60004);
 DELETE FROM `gossip_menu_option` where option_text = 'Manage attributes';
 
 -- root menu
@@ -14,6 +14,9 @@ VALUES (60001, 1, 0, 0);
 
 INSERT INTO `gossip_menu` (`entry`, `text_id`, `script_id`, `condition_id`)
 VALUES (60002, 1, 0, 0);
+
+INSERT INTO `gossip_menu` (`entry`, `text_id`, `script_id`, `condition_id`)
+VALUES (60003, 1, 0, 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
@@ -41,11 +44,39 @@ INSERT INTO `gossip_menu_option`
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 6, 4, 'Unlearn all attributes', 1, 16, 60002, 0, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 7, 4, 'Unlearn all attributes', 1, 16, 60002, 0, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
 `box_money`, `box_text`, `condition_id`) VALUES (60002, 6, 4, 'I am sure I do want to unlearn all attributes', 18, 16, 0, 6, 0, 0, 0, '', 0);
+
+INSERT INTO `gossip_menu_option`
+(`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 8, 4, 'Temporary reduce attributes', 1, 16, 60003, 0, 0, 0, 0, '', 0);
+
+INSERT INTO `gossip_menu_option`
+(`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 11, 3, 'Disable', 18, 16, 0, 11, 0, 0, 0, '', 0);
+
+INSERT INTO `gossip_menu_option`
+(`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 12, 3, 'Reduce by 90%', 18, 16, 0, 12, 0, 0, 0, '', 0);
+
+INSERT INTO `gossip_menu_option`
+(`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 14, 3, 'Reduce by 70%', 18, 16, 0, 14, 0, 0, 0, '', 0);
+
+INSERT INTO `gossip_menu_option`
+(`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 16, 3, 'Reduce by 50%', 18, 16, 0, 16, 0, 0, 0, '', 0);
+
+INSERT INTO `gossip_menu_option`
+(`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 18, 3, 'Reduce by 30%', 18, 16, 0, 18, 0, 0, 0, '', 0);
+
+INSERT INTO `gossip_menu_option`
+(`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 20, 3, 'Reduce by 10%', 18, 16, 0, 20, 0, 0, 0, '', 0);
 
 -- add to trainers
 INSERT INTO `gossip_menu_option`

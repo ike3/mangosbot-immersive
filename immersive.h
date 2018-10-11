@@ -33,6 +33,7 @@ namespace immersive
     private:
         void PrintHelp(Player *player, bool detailed = false);
         void IncreaseStat(Player *player, uint32 type);
+        void ChangeModifier(Player *player, uint32 type);
         void ResetStats(Player *player);
         void SendMessage(Player *player, string message);
 
