@@ -5,6 +5,16 @@ using namespace std;
 
 namespace immersive
 {
+    enum ImmersiveEffectiveChance
+    {
+        IMMERSIVE_EFFECTIVE_CHANCE_MISS,
+        IMMERSIVE_EFFECTIVE_CHANCE_DODGE,
+        IMMERSIVE_EFFECTIVE_CHANCE_PARRY,
+        IMMERSIVE_EFFECTIVE_CHANCE_BLOCK,
+        IMMERSIVE_EFFECTIVE_CHANCE_CRIT,
+        IMMERSIVE_EFFECTIVE_CHANCE_SPELL_MISS,
+    };
+
     class ImmersiveAction
     {
     public:
@@ -29,6 +39,7 @@ namespace immersive
         void OnReputationChange(Player* player, FactionEntry const* factionEntry, int32& standing, bool incremental);
         void OnRewardQuest(Player* player, Quest const* quest);
         bool OnFishing(Player* player, bool success);
+        int32 CalculateEffectiveChance(int32 difference, const Unit* attacker, const Unit* victim, ImmersiveEffectiveChance type);
 
     private:
         void PrintHelp(Player *player, bool detailed = false);
@@ -36,6 +47,7 @@ namespace immersive
         void ChangeModifier(Player *player, uint32 type);
         void ResetStats(Player *player);
         void SendMessage(Player *player, string message);
+        uint32 CalculateEffectiveChanceDelta(const Unit* unit);
 
     private:
         uint32 GetTotalStats(Player *player);
@@ -52,6 +64,7 @@ namespace immersive
     private:
         static map<Stats, string> statValues;
         static map<Stats, string> statNames;
+        map<uint32, map<string, uint32> > valueCache;
     };
 }
 

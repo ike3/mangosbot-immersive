@@ -308,24 +308,29 @@ uint32 Immersive::GetStatCost(Player *player)
 
 uint32 Immersive::GetValue(uint32 owner, string type)
 {
-    uint32 value = 0;
+    uint32 value = valueCache[owner][type];
 
-    QueryResult* results = CharacterDatabase.PQuery(
-            "select `value` from immersive_values where owner = '%u' and `type` = '%s'",
-            owner, type.c_str());
-
-    if (results)
+    if (!value)
     {
-        Field* fields = results->Fetch();
-        value = fields[0].GetUInt32();
-    }
+        QueryResult* results = CharacterDatabase.PQuery(
+                "select `value` from immersive_values where owner = '%u' and `type` = '%s'",
+                owner, type.c_str());
 
-    delete results;
+        if (results)
+        {
+            Field* fields = results->Fetch();
+            value = fields[0].GetUInt32();
+            valueCache[owner][type] = value;
+        }
+
+        delete results;
+    }
     return value;
 }
 
 uint32 Immersive::SetValue(uint32 owner, string type, uint32 value)
 {
+    valueCache[owner][type] = value;
     CharacterDatabase.DirectPExecute("delete from immersive_values where owner = '%u' and `type` = '%s'",
             owner, type.c_str());
     if (value)
@@ -524,6 +529,55 @@ bool Immersive::OnFishing(Player* player, bool success)
     }
 
     return false;
+}
+
+int32 Immersive::CalculateEffectiveChance(int32 difference, const Unit* attacker, const Unit* victim, ImmersiveEffectiveChance type)
+{
+    if (!sImmersiveConfig.manualAttributes) return difference;
+
+    uint32 attackerDelta = CalculateEffectiveChanceDelta(attacker);
+    uint32 victimDelta = CalculateEffectiveChanceDelta(victim);
+    uint32 multiplier = (type == IMMERSIVE_EFFECTIVE_CHANCE_SPELL_MISS ? 1 : 5);
+
+    switch (type)
+    {
+    case IMMERSIVE_EFFECTIVE_CHANCE_MISS:
+    case IMMERSIVE_EFFECTIVE_CHANCE_SPELL_MISS:
+        // victim defense - attacker offense
+        difference -= victimDelta * multiplier;
+        difference += attackerDelta * multiplier;
+        break;
+    case IMMERSIVE_EFFECTIVE_CHANCE_DODGE:
+    case IMMERSIVE_EFFECTIVE_CHANCE_PARRY:
+    case IMMERSIVE_EFFECTIVE_CHANCE_BLOCK:
+        // attacker defense - victim offense
+        difference -= attackerDelta * multiplier;
+        difference += victimDelta * multiplier;
+        break;
+    case IMMERSIVE_EFFECTIVE_CHANCE_CRIT:
+        // attacker offence - victim defense
+        difference -= attackerDelta * multiplier;
+        difference += victimDelta * multiplier;
+        break;
+    }
+
+    return difference;
+}
+
+uint32 Immersive::CalculateEffectiveChanceDelta(const Unit* unit)
+{
+    if (unit->GetObjectGuid().IsPlayer())
+    {
+        int modifier = GetValue(unit->GetObjectGuid().GetCounter(), "modifier");
+        if (!modifier) modifier = 100;
+#ifdef ENABLE_PLAYERBOTS
+        if (sPlayerbotAIConfig.IsInRandomAccountList(sObjectMgr.GetPlayerAccountIdByGUID(unit->GetObjectGuid())))
+            return 0;
+#endif
+        return unit->getLevel() * (100 - modifier) / 100;
+    }
+
+    return 0;
 }
 
 INSTANTIATE_SINGLETON_1( immersive::Immersive );
