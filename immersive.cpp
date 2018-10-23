@@ -533,35 +533,32 @@ bool Immersive::OnFishing(Player* player, bool success)
 
 int32 Immersive::CalculateEffectiveChance(int32 difference, const Unit* attacker, const Unit* victim, ImmersiveEffectiveChance type)
 {
-    if (!sImmersiveConfig.manualAttributes) return difference;
+    if (!sImmersiveConfig.manualAttributes) return 0;
 
-    uint32 attackerDelta = CalculateEffectiveChanceDelta(attacker);
-    uint32 victimDelta = CalculateEffectiveChanceDelta(victim);
-    uint32 multiplier = (type == IMMERSIVE_EFFECTIVE_CHANCE_SPELL_MISS ? 1 : 5);
+    int32 attackerDelta = CalculateEffectiveChanceDelta(attacker);
+    int32 victimDelta = CalculateEffectiveChanceDelta(victim);
+    int32 multiplier = (type == IMMERSIVE_EFFECTIVE_CHANCE_SPELL_MISS ? 1 : 5);
 
     switch (type)
     {
     case IMMERSIVE_EFFECTIVE_CHANCE_MISS:
     case IMMERSIVE_EFFECTIVE_CHANCE_SPELL_MISS:
         // victim defense - attacker offense
-        difference -= victimDelta * multiplier;
-        difference += attackerDelta * multiplier;
-        break;
+        return - victimDelta * multiplier
+                + attackerDelta * multiplier;
     case IMMERSIVE_EFFECTIVE_CHANCE_DODGE:
     case IMMERSIVE_EFFECTIVE_CHANCE_PARRY:
     case IMMERSIVE_EFFECTIVE_CHANCE_BLOCK:
         // attacker defense - victim offense
-        difference -= attackerDelta * multiplier;
-        difference += victimDelta * multiplier;
-        break;
+        return - attackerDelta * multiplier
+                + victimDelta * multiplier;
     case IMMERSIVE_EFFECTIVE_CHANCE_CRIT:
         // attacker offence - victim defense
-        difference -= attackerDelta * multiplier;
-        difference += victimDelta * multiplier;
-        break;
+        return - attackerDelta * multiplier
+                + victimDelta * multiplier;
     }
 
-    return difference;
+    return 0;
 }
 
 uint32 Immersive::CalculateEffectiveChanceDelta(const Unit* unit)
