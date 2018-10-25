@@ -40,6 +40,10 @@ namespace immersive
         void OnRewardQuest(Player* player, Quest const* quest);
         bool OnFishing(Player* player, bool success);
         int32 CalculateEffectiveChance(int32 difference, const Unit* attacker, const Unit* victim, ImmersiveEffectiveChance type);
+        uint32 GetModifierValue(uint32 owner);
+        uint32 GetStatsValue(uint32 owner, Stats type);
+        void SetStatsValue(uint32 owner, Stats type, uint32 value);
+        uint32 GetTotalStats(Player *player);
 
     private:
         void PrintHelp(Player *player, bool detailed = false);
@@ -50,7 +54,6 @@ namespace immersive
         uint32 CalculateEffectiveChanceDelta(const Unit* unit);
 
     private:
-        uint32 GetTotalStats(Player *player);
         uint32 GetUsedStats(Player *player);
         uint32 GetStatCost(Player *player);
 
@@ -59,7 +62,7 @@ namespace immersive
 
     private:
         uint32 GetValue(uint32 owner, string type);
-        uint32 SetValue(uint32 owner, string type, uint32 value);
+        void SetValue(uint32 owner, string type, uint32 value);
 
     private:
         static map<Stats, string> statValues;

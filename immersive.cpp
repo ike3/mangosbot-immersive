@@ -73,20 +73,22 @@ void Immersive::GetPlayerLevelInfo(Player *player, PlayerLevelInfo* info)
     if (!sImmersiveConfig.manualAttributes) return;
 
 #ifdef ENABLE_PLAYERBOTS
-    uint32 account = sObjectMgr.GetPlayerAccountIdByGUID(player->GetObjectGuid());
-    if (sPlayerbotAIConfig.IsInRandomAccountList(account))
-        return;
+    if (!sPlayerbotAIConfig.randomBotImmersive)
+    {
+        uint32 account = sObjectMgr.GetPlayerAccountIdByGUID(player->GetObjectGuid());
+        if (sPlayerbotAIConfig.IsInRandomAccountList(account))
+            return;
+    }
 #endif
 
     PlayerInfo const* playerInfo = sObjectMgr.GetPlayerInfo(player->getRace(), player->getClass());
     *info = playerInfo->levelInfo[0];
 
     uint32 owner = player->GetObjectGuid().GetRawValue();
-    int modifier = GetValue(owner, "modifier");
-    if (!modifier) modifier = 100;
+    int modifier = GetModifierValue(owner);
     for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
     {
-        info->stats[i] += GetValue(owner, Immersive::statValues[(Stats)i]) * modifier / 100;
+        info->stats[i] += GetStatsValue(owner, (Stats)i) * modifier / 100;
     }
 }
 
@@ -140,10 +142,10 @@ void Immersive::OnDeath(Player *player)
     {
         for (int type = STAT_STRENGTH; type < MAX_STATS && totalLoss < lossPerDeath; ++type)
         {
-            uint32 value = GetValue(owner, statValues[(Stats)type]);
+            uint32 value = GetStatsValue(owner, (Stats)type);
             if (value)
             {
-                SetValue(owner, statValues[(Stats)type], value - 1);
+                SetStatsValue(owner, (Stats)type, value - 1);
                 loss[(Stats)type]++;
                 totalLoss++;
             }
@@ -197,11 +199,10 @@ void Immersive::PrintHelp(Player *player, bool detailed)
         out << "|cffa0a0ffUsed: ";
         bool first = true;
         bool used = false;
-        uint32 modifier = GetValue(owner, "modifier");
-        if (!modifier) modifier = 100;
+        uint32 modifier = GetModifierValue(owner);
         for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
         {
-            uint32 value = GetValue(owner, statValues[(Stats)i]) * modifier / 100;
+            uint32 value = GetStatsValue(owner, (Stats)i) * modifier / 100;
             if (!value) continue;
             if (!first) out << ", "; else first = false;
             out << "|cff00ff00+" << value << "|cffa0a0ff " << statNames[(Stats)i];
@@ -249,8 +250,8 @@ void Immersive::IncreaseStat(Player *player, uint32 type)
         return;
     }
 
-    uint32 value = GetValue(owner, statValues[(Stats)type]);
-    SetValue(owner, statValues[(Stats)type], value + 1);
+    uint32 value = GetStatsValue(owner, (Stats)type);
+    SetStatsValue(owner, (Stats)type, value + 1);
 
     usedStats = GetUsedStats(player);
     totalStats = GetTotalStats(player);
@@ -295,7 +296,7 @@ uint32 Immersive::GetUsedStats(Player *player)
 
     uint32 usedStats = 0;
     for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
-        usedStats += GetValue(owner, statValues[(Stats)i]);
+        usedStats += GetStatsValue(owner, (Stats)i);
 
     return usedStats;
 }
@@ -328,7 +329,7 @@ uint32 Immersive::GetValue(uint32 owner, string type)
     return value;
 }
 
-uint32 Immersive::SetValue(uint32 owner, string type, uint32 value)
+void Immersive::SetValue(uint32 owner, string type, uint32 value)
 {
     valueCache[owner][type] = value;
     CharacterDatabase.DirectPExecute("delete from immersive_values where owner = '%u' and `type` = '%s'",
@@ -339,8 +340,23 @@ uint32 Immersive::SetValue(uint32 owner, string type, uint32 value)
                 "insert into immersive_values (owner, `type`, `value`) values ('%u', '%s', '%u')",
                 owner, type.c_str(), value);
     }
+}
 
-    return value;
+uint32 Immersive::GetStatsValue(uint32 owner, Stats type)
+{
+    return GetValue(owner, Immersive::statValues[type]);
+}
+
+void Immersive::SetStatsValue(uint32 owner, Stats type, uint32 value)
+{
+    SetValue(owner, Immersive::statValues[type], value);
+}
+
+uint32 Immersive::GetModifierValue(uint32 owner)
+{
+    int modifier = GetValue(owner, "modifier");
+    if (!modifier) modifier = 100;
+    return modifier;
 }
 
 void Immersive::SendMessage(Player *player, string message)
@@ -565,8 +581,7 @@ uint32 Immersive::CalculateEffectiveChanceDelta(const Unit* unit)
 {
     if (unit->GetObjectGuid().IsPlayer())
     {
-        int modifier = GetValue(unit->GetObjectGuid().GetCounter(), "modifier");
-        if (!modifier) modifier = 100;
+        int modifier = GetModifierValue(unit->GetObjectGuid().GetCounter());
 #ifdef ENABLE_PLAYERBOTS
         if (sPlayerbotAIConfig.IsInRandomAccountList(sObjectMgr.GetPlayerAccountIdByGUID(unit->GetObjectGuid())))
             return 0;
