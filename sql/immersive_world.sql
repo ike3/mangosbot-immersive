@@ -76,6 +76,10 @@ INSERT INTO `gossip_menu_option`
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 19, 3, 'Reduce by 20%', 18, 16, 0, 19, 0, 0, 0, '', 0);
+
+INSERT INTO `gossip_menu_option`
+(`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
 `box_money`, `box_text`, `condition_id`) VALUES (60003, 20, 3, 'Reduce by 10%', 18, 16, 0, 20, 0, 0, 0, '', 0);
 
 -- add to trainers
