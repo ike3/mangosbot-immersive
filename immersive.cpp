@@ -553,10 +553,18 @@ int32 Immersive::CalculateEffectiveChance(int32 difference, const Unit* attacker
 
     int32 attackerDelta = CalculateEffectiveChanceDelta(attacker);
     int32 victimDelta = CalculateEffectiveChanceDelta(victim);
-    int32 multiplier = (type == IMMERSIVE_EFFECTIVE_CHANCE_SPELL_MISS ? 1 : 5);
+
+    int32 multiplier = 5;
+    if (type == IMMERSIVE_EFFECTIVE_CHANCE_SPELL_MISS || type == IMMERSIVE_EFFECTIVE_ATTACK_DISTANCE)
+        multiplier = 1;
 
     switch (type)
     {
+    case IMMERSIVE_EFFECTIVE_ATTACK_DISTANCE:
+        // victim level - attacker level
+        return - victimDelta * multiplier
+                + attackerDelta * multiplier;
+        break;
     case IMMERSIVE_EFFECTIVE_CHANCE_MISS:
     case IMMERSIVE_EFFECTIVE_CHANCE_SPELL_MISS:
         // victim defense - attacker offense
