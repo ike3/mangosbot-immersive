@@ -26,6 +26,7 @@ bool ImmersiveConfig::Initialize()
     sharedRepPercent = config.GetFloatDefault("Immersive.sharedRepPercent", 90.0f);
     sharedQuests = config.GetBoolDefault("Immersive.SharedQuests", true);
     fishingBaubles = config.GetBoolDefault("Immersive.FishingBaubles", true);
+    sharedPercentRaceRestiction = config.GetBoolDefault("Immersive.SharedPercentRaceRestiction", true);
 
     sLog.outString("Immersive configuration loaded");
     return true;

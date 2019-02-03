@@ -138,7 +138,7 @@ void Immersive::OnDeath(Player *player)
 
     int totalLoss = 0;
     int lossPerDeath = 3;
-    for (uint32 i = 0; i < lossPerDeath && totalLoss < lossPerDeath; i++)
+    for (int i = 0; i < lossPerDeath && totalLoss < lossPerDeath; i++)
     {
         for (int type = STAT_STRENGTH; type < MAX_STATS && totalLoss < lossPerDeath; ++type)
         {
@@ -402,15 +402,17 @@ public:
 
     virtual bool Run(Player* player, Player* bot)
     {
-        if ((int)player->getLevel() - (int)bot->getLevel() > 1)
-        {
-            bot->GiveXP(value, NULL);
-            Pet *pet = bot->GetPet();
-            if (pet && pet->getPetType() == HUNTER_PET)
-                pet->GivePetXP(value);
-            return true;
-        }
-        return false;
+        if ((int)player->getLevel() - (int)bot->getLevel() <= 1)
+            return false;
+
+        if (sImmersiveConfig.sharedPercentRaceRestiction && player->getRace() != bot->getRace())
+            return false;
+
+        bot->GiveXP(value, NULL);
+        Pet *pet = bot->GetPet();
+        if (pet && pet->getPetType() == HUNTER_PET)
+            pet->GivePetXP(value);
+        return true;
     }
 
     virtual string GetMessage()
@@ -443,6 +445,9 @@ public:
 
     virtual bool Run(Player* player, Player* bot)
     {
+        if (sImmersiveConfig.sharedPercentRaceRestiction && player->getRace() != bot->getRace())
+            return false;
+
         bot->GetReputationMgr().ModifyReputation(factionEntry, value);
         return true;
     }
@@ -478,6 +483,9 @@ public:
     virtual bool Run(Player* player, Player* bot)
     {
         if (quest->GetRequiredClasses())
+            return false;
+
+        if (sImmersiveConfig.sharedPercentRaceRestiction && player->getRace() != bot->getRace())
             return false;
 
         uint32 questId = quest->GetQuestId();
