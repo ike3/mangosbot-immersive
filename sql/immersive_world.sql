@@ -88,4 +88,6 @@ INSERT INTO `gossip_menu_option`
 SELECT menu_id, 61, 3, 'Manage attributes', 1, 16, 60001, 0, 0, 0, 0, '', 0 FROM `gossip_menu_option` where `action_menu_id` = 4461;
 
 -- add missing gossips to trainers
-update creature_template set GossipMenuId = 4537 where entry in (select entry from one_world.creature_template_backup);
+update creature_template set GossipMenuId = 4537 where entry in (select entry from creature_template_backup);
+
+create index idx_pool_template_desc on pool_template(description);

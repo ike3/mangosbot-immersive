@@ -105,9 +105,15 @@ include_directories(
 if (BUILD_PLAYERBOT)
   add_definitions(-DENABLE_PLAYERBOTS)
 endif()
+if (PLAYERBOTS)
+  add_definitions(-DENABLE_PLAYERBOTS)
+endif()
 
 # Define ENABLE_IMMERSIVE if need
 if (BUILD_IMMERSIVE)
+  add_definitions(-DENABLE_IMMERSIVE)
+endif()
+if (IMMERSIVE)
   add_definitions(-DENABLE_IMMERSIVE)
 endif()
 
@@ -117,7 +123,10 @@ endif()
 
 add_library(${LIBRARY_NAME} STATIC ${LIBRARY_SRCS})
 
-target_link_libraries(${LIBRARY_NAME} shared detour)
+target_link_libraries(${LIBRARY_NAME} 
+	shared 
+	RecastNavigation::Detour
+)
 
 if(UNIX)
   # Both systems don't have libdl and don't need them

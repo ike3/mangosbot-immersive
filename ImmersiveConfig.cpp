@@ -1,5 +1,5 @@
 #include "immersivepch.h"
-#include "../../shared/SystemConfig.h"
+#include "SystemConfig.h"
 #include "ImmersiveConfig.h"
 
 using namespace std;

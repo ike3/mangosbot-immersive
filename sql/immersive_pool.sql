@@ -4,20 +4,6 @@ create table pool_template_backup as select * from pool_template;
 drop table if exists pool_gameobject_backup;
 create table pool_gameobject_backup as select * from pool_gameobject;
 
-drop table if exists gameobject_tmp;
-create table gameobject_tmp as 
-SELECT 
- o.guid
-FROM gameobject o
- join gameobject_template t on t.entry = o.id
- join pool_gameobject pg on pg.guid = o.guid
- join pool_template pt on pt.entry = pg.pool_entry
-where t.type in (3, 25, 17) and o.map in(0,1,530) and t.name in (select distinct name from immersive_pool);
-
-create index idx_gameobject_tmp_guid on gameobject_tmp(guid);
-delete from pool_gameobject where guid in (select guid from gameobject_tmp);
-
-
 -- cleanup
 delete from pool_template where description like 'Immersive%';
 delete from pool_gameobject where description like 'Immersive%';
@@ -163,6 +149,19 @@ update immersive_pool set divider = 300, max_limit = 1 where type = 1;
 update immersive_pool set divider = 100, max_limit = 1 where type = 2;
 update immersive_pool set divider = 300, max_limit = 1 where type = 3;
 update immersive_pool set divider = 200, max_limit = 5 where type = 4;
+
+drop table if exists gameobject_tmp;
+create table gameobject_tmp as 
+SELECT 
+ o.guid
+FROM gameobject o
+ join gameobject_template t on t.entry = o.id
+ join pool_gameobject pg on pg.guid = o.guid
+ join pool_template pt on pt.entry = pg.pool_entry
+where t.type in (3, 25, 17) and o.map in(0,1,530) and t.name in (select distinct name from immersive_pool);
+
+create index idx_gameobject_tmp_guid on gameobject_tmp(guid);
+delete from pool_gameobject where guid in (select guid from gameobject_tmp);
 
 -- pool_template
 INSERT INTO pool_template (entry, max_limit, description)
