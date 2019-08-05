@@ -372,6 +372,28 @@ void Immersive::SendMessage(Player *player, string message)
     chat.PSendSysMessage(message.c_str());
 }
 
+bool ImmersiveAction::CheckSharedPercentReqs(Player* player, Player* bot)
+{
+    if (sImmersiveConfig.sharedPercentMinLevel && (int)player->getLevel() < sImmersiveConfig.sharedPercentMinLevel)
+        return false;
+
+    uint8 race1 = player->getRace();
+    uint8 race2 = bot->getRace();
+
+    if (sImmersiveConfig.sharedPercentRaceRestiction == 2)
+    {
+        if (race1 == RACE_TROLL) race1 = RACE_ORC;
+        if (race1 == RACE_DWARF) race1 = RACE_GNOME;
+
+        if (race2 == RACE_TROLL) race2 = RACE_ORC;
+        if (race2 == RACE_DWARF) race2 = RACE_GNOME;
+    }
+
+    if (sImmersiveConfig.sharedPercentRaceRestiction && race1 != race2)
+        return false;
+
+    return true;
+}
 
 void Immersive::RunAction(Player* player, ImmersiveAction* action)
 {
@@ -405,7 +427,7 @@ public:
         if ((int)player->getLevel() - (int)bot->getLevel() <= 1)
             return false;
 
-        if (sImmersiveConfig.sharedPercentRaceRestiction && player->getRace() != bot->getRace())
+        if (!CheckSharedPercentReqs(player, bot))
             return false;
 
         bot->GiveXP(value, NULL);
@@ -445,7 +467,7 @@ public:
 
     virtual bool Run(Player* player, Player* bot)
     {
-        if (sImmersiveConfig.sharedPercentRaceRestiction && player->getRace() != bot->getRace())
+        if (!CheckSharedPercentReqs(player, bot))
             return false;
 
         bot->GetReputationMgr().ModifyReputation(factionEntry, value);
@@ -485,7 +507,7 @@ public:
         if (quest->GetRequiredClasses())
             return false;
 
-        if (sImmersiveConfig.sharedPercentRaceRestiction && player->getRace() != bot->getRace())
+        if (!CheckSharedPercentReqs(player, bot))
             return false;
 
         uint32 questId = quest->GetQuestId();

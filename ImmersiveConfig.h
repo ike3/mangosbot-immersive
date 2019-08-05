@@ -21,7 +21,8 @@ public:
     float sharedRepPercent;
     bool sharedQuests;
     bool fishingBaubles;
-    bool sharedPercentRaceRestiction;
+    int sharedPercentRaceRestiction;
+    float sharedPercentMinLevel;
 
 private:
     Config config;

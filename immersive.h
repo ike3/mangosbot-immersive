@@ -24,6 +24,9 @@ namespace immersive
     public:
         virtual bool Run(Player* player, Player* bot) = 0;
         virtual string GetMessage() = 0;
+
+    protected:
+        virtual bool CheckSharedPercentReqs(Player* player, Player* bot);
     };
 
     class Immersive
