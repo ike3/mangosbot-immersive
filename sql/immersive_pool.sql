@@ -142,13 +142,25 @@ insert into immersive_pool (name, type, chance) values
 ('Fel Iron Chest', 4, 0),
 ('Heavy Fel Iron Chest', 4, 0),
 ('Adamantite Bound Chest', 4, 0),
-('Felsteel Chest', 4, 0)
+('Felsteel Chest', 4, 0),
+
+-- 5 = Ore
+('Copper Vein', 5, 0),
+('Tin Vein', 5, 0),
+('Silver Vein', 5, 0),
+('Iron Deposit', 5, 0),
+('Gold Vein', 5, 0),
+('Mithril Deposit', 5, 0),
+('Small Thorium Vein', 5, 0),
+('Rich Thorium Vein', 5, 0),
+('Truesilver Vein', 5, 0)
 ;
 
 update immersive_pool set divider = 200, max_limit = 1 where type = 1;
 update immersive_pool set divider = 100, max_limit = 1 where type = 2;
 update immersive_pool set divider = 300, max_limit = 1 where type = 3;
 update immersive_pool set divider = 200, max_limit = 5 where type = 4;
+update immersive_pool set divider = 150, max_limit = 5 where type = 5;
 
 drop table if exists gameobject_tmp;
 create table gameobject_tmp as 
