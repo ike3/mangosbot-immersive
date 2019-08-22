@@ -145,7 +145,7 @@ insert into immersive_pool (name, type, chance) values
 ('Felsteel Chest', 4, 0)
 ;
 
-update immersive_pool set divider = 300, max_limit = 1 where type = 1;
+update immersive_pool set divider = 200, max_limit = 1 where type = 1;
 update immersive_pool set divider = 100, max_limit = 1 where type = 2;
 update immersive_pool set divider = 300, max_limit = 1 where type = 3;
 update immersive_pool set divider = 200, max_limit = 5 where type = 4;
