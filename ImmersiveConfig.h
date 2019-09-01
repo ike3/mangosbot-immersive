@@ -23,6 +23,8 @@ public:
     bool fishingBaubles;
     int sharedPercentRaceRestiction;
     float sharedPercentMinLevel;
+    int attributeLossPerDeath;
+    float fallDamageMultiplier;
 
 private:
     Config config;

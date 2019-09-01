@@ -125,7 +125,7 @@ void Immersive::OnGossipSelect(Player *player, uint32 gossipListId, GossipMenuIt
 
 float Immersive::GetFallDamage(float zdist)
 {
-    return 0.0075 * zdist * zdist;
+    return 0.0055 * zdist * zdist * sImmersiveConfig.fallDamageMultiplier;
 }
 
 void Immersive::OnDeath(Player *player)
@@ -137,7 +137,9 @@ void Immersive::OnDeath(Player *player)
         loss[(Stats)j] = 0;
 
     int totalLoss = 0;
-    int lossPerDeath = 3;
+    int lossPerDeath = sImmersiveConfig.attributeLossPerDeath;
+    if (lossPerDeath < 1) return;
+
     for (int i = 0; i < lossPerDeath && totalLoss < lossPerDeath; i++)
     {
         for (int type = STAT_STRENGTH; type < MAX_STATS && totalLoss < lossPerDeath; ++type)

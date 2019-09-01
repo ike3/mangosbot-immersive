@@ -28,6 +28,8 @@ bool ImmersiveConfig::Initialize()
     fishingBaubles = config.GetBoolDefault("Immersive.FishingBaubles", true);
     sharedPercentRaceRestiction = config.GetIntDefault("Immersive.SharedPercentRaceRestiction", 2);
     sharedPercentMinLevel = config.GetFloatDefault("Immersive.SharedPercentMinLevel", 5);
+    attributeLossPerDeath = config.GetIntDefault("Immersive.AttributeLossPerDeath", 1);
+    fallDamageMultiplier = config.GetFloatDefault("Immersive.FallDamageMultiplier", 1);
 
     sLog.outString("Immersive configuration loaded");
     return true;

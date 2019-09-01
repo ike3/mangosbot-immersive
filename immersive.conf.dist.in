@@ -29,3 +29,9 @@ Immersive.SharedPercentRaceRestiction = 2
 
 # Minimum player level to enable Shared Percent gains
 Immersive.SharedPercentMinLevel = 5
+
+# How many attributes is lost on death (release spirit)
+Immersive.AttributeLossPerDeath = 1
+
+# Fall damage multiplier
+Immersive.FallDamageMultiplier = 1.0
