@@ -11,10 +11,10 @@ Immersive.ServerPort = 0
 Immersive.ManualAttributes = 1
 
 # All your alts get a percent of your XP whenever you get it
-Immersive.sharedXpPercent = 90
+Immersive.SharedXpPercent = 90
 
 # All your alts get a percent of your reputation whenever you get it
-Immersive.sharedRepPercent = 90
+Immersive.SharedRepPercent = 90
 
 # All your alts complete quests when you have completed them
 # Can be used as a compensation for Immersive.sharedXpPercent and Immersive.sharedRepPercent
@@ -25,7 +25,7 @@ Immersive.FishingBaubles = 1
 
 # Shared Percent gains are restricted to your race (1)
 # (2) makes dwarf and gnome (orc and troll) the same race in terms of restriction
-Immersive.SharedPercentRaceRestiction = 2
+Immersive.SharedPercentRaceRestriction = 2
 
 # Minimum player level to enable Shared Percent gains
 Immersive.SharedPercentMinLevel = 5
