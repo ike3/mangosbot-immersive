@@ -376,6 +376,19 @@ void Immersive::SendMessage(Player *player, string message)
 
 bool ImmersiveAction::CheckSharedPercentReqs(Player* player, Player* bot)
 {
+    Group *group = player->GetGroup();
+    if (!group) return CheckSharedPercentReqsSingle(player, bot);
+
+    for (GroupReference *gr = group->GetFirstMember(); gr; gr = gr->next())
+    {
+        Player *member = gr->getSource();
+        if (CheckSharedPercentReqsSingle(member, bot)) return true;
+    }
+    return false;
+}
+
+bool ImmersiveAction::CheckSharedPercentReqsSingle(Player* player, Player* bot)
+{
     if (sImmersiveConfig.sharedPercentMinLevel && (int)player->getLevel() < sImmersiveConfig.sharedPercentMinLevel)
         return false;
 

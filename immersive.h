@@ -27,6 +27,7 @@ namespace immersive
 
     protected:
         virtual bool CheckSharedPercentReqs(Player* player, Player* bot);
+        virtual bool CheckSharedPercentReqsSingle(Player* player, Player* bot);
     };
 
     class Immersive
