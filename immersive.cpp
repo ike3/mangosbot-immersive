@@ -287,9 +287,18 @@ void Immersive::ResetStats(Player *player)
     player->UpdateAllStats();
 }
 
-uint32 Immersive::GetTotalStats(Player *player)
+uint32 Immersive::GetTotalStats(Player *player, uint8 level)
 {
-    return (player->getLevel() - 1) * 3;
+    PlayerInfo const* info = sObjectMgr.GetPlayerInfo(player->getRace(), player->getClass());
+    PlayerLevelInfo level1Info = info->levelInfo[0];
+    if (!level) level = player->getLevel();
+    PlayerLevelInfo levelCInfo = info->levelInfo[level - 1];
+    int total = 0;
+    for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
+    {
+        total += ((int)levelCInfo.stats[i] - (int)level1Info.stats[i]);
+    }
+    return (uint32)floor(total * sImmersiveConfig.manualAttributesPercent / 100.0f);
 }
 
 uint32 Immersive::GetUsedStats(Player *player)
@@ -305,7 +314,16 @@ uint32 Immersive::GetUsedStats(Player *player)
 
 uint32 Immersive::GetStatCost(Player *player)
 {
-    uint32 usedLevels = GetUsedStats(player) / 3;
+    uint32 usedStats = GetUsedStats(player);
+    uint32 usedLevels = usedStats / 5;
+    for (uint8 level = player->getLevel(); level >= 1 ; level--)
+    {
+        uint32 forLevel = GetTotalStats(player, level);
+        if (usedStats >= forLevel) {
+            usedLevels = level;
+            break;
+        }
+    }
     return 10 * (usedLevels * usedLevels + 1);
 }
 

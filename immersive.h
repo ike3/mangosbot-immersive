@@ -48,7 +48,7 @@ namespace immersive
         uint32 GetModifierValue(uint32 owner);
         uint32 GetStatsValue(uint32 owner, Stats type);
         void SetStatsValue(uint32 owner, Stats type, uint32 value);
-        uint32 GetTotalStats(Player *player);
+        uint32 GetTotalStats(Player *player, uint8 level = 0);
 
     private:
         void PrintHelp(Player *player, bool detailed = false);
