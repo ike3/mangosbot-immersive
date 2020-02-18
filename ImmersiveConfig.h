@@ -26,6 +26,7 @@ public:
     float sharedPercentMinLevel;
     int attributeLossPerDeath;
     float fallDamageMultiplier;
+    int sharedXpPercentLevelDiff;
 
 private:
     Config config;

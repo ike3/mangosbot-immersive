@@ -31,6 +31,7 @@ bool ImmersiveConfig::Initialize()
     sharedPercentMinLevel = config.GetFloatDefault("Immersive.SharedPercentMinLevel", 5);
     attributeLossPerDeath = config.GetIntDefault("Immersive.AttributeLossPerDeath", 1);
     fallDamageMultiplier = config.GetFloatDefault("Immersive.FallDamageMultiplier", 1);
+    sharedXpPercentLevelDiff = config.GetIntDefault("Immersive.SharedXpPercentLevelDiff", 1);
 
     sLog.outString("Immersive configuration loaded");
     return true;

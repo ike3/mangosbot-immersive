@@ -457,7 +457,7 @@ public:
 
     virtual bool Run(Player* player, Player* bot)
     {
-        if ((int)player->getLevel() - (int)bot->getLevel() <= 1)
+        if ((int)player->getLevel() - (int)bot->getLevel() <= sImmersiveConfig.sharedXpPercentLevelDiff)
             return false;
 
         if (!CheckSharedPercentReqs(player, bot))
