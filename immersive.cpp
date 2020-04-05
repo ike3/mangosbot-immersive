@@ -436,7 +436,8 @@ void Immersive::RunAction(Player* player, ImmersiveAction* action)
     for (PlayerBotMap::const_iterator i = player->GetPlayerbotMgr()->GetPlayerBotsBegin(); i != player->GetPlayerbotMgr()->GetPlayerBotsEnd(); ++i)
     {
         Player *bot = i->second;
-        if (!bot->GetGroup() && action->Run(player, bot))
+        if (bot->GetGroup() && bot->GetGroup() == player->GetGroup()) continue;
+        if (action->Run(player, bot))
         {
             if (!first)  out << ", "; else first = false;
             out << bot->GetName();
