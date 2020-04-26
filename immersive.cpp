@@ -97,7 +97,7 @@ void Immersive::OnGossipSelect(Player *player, uint32 gossipListId, GossipMenuIt
     switch (menuData->m_gAction_poi)
     {
     case 0: // Help
-        PrintHelp(player, true);
+        PrintHelp(player, true, true);
         break;
     case 1:
     case 2:
@@ -181,7 +181,7 @@ string percent(Player *player)
     return player->GetPlayerbotAI() ? "%" : "%%";
 }
 
-void Immersive::PrintHelp(Player *player, bool detailed)
+void Immersive::PrintHelp(Player *player, bool detailed, bool help)
 {
     uint32 owner = player->GetObjectGuid().GetRawValue();
 
@@ -212,6 +212,29 @@ void Immersive::PrintHelp(Player *player, bool detailed)
         }
 
         if (modifier != 100) out << " (|cff00ff00" << modifier << percent(player) << "|cffa0a0ff modifier)";
+        if (used)
+            SendMessage(player, out.str().c_str());
+    }
+
+    if (help)
+    {
+        ostringstream out;
+        out << "|cffa0a0ffDefault: ";
+        PlayerInfo const* info = sObjectMgr.GetPlayerInfo(player->getRace(), player->getClass());
+        PlayerLevelInfo level1Info = info->levelInfo[0];
+        uint8 level = player->getLevel();
+        PlayerLevelInfo levelCInfo = info->levelInfo[level - 1];
+        bool first = true;
+        bool used = false;
+        for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
+        {
+            uint32 value = ((int)levelCInfo.stats[i] - (int)level1Info.stats[i]);
+            value = (uint32)floor(value * sImmersiveConfig.manualAttributesPercent / 100.0f);
+            if (!value) continue;
+            if (!first) out << ", "; else first = false;
+            out << "|cff00ff00+" << value << "|cffa0a0ff " << statNames[(Stats)i];
+            used = true;
+        }
         if (used)
             SendMessage(player, out.str().c_str());
     }

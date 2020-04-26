@@ -51,7 +51,7 @@ namespace immersive
         uint32 GetTotalStats(Player *player, uint8 level = 0);
 
     private:
-        void PrintHelp(Player *player, bool detailed = false);
+        void PrintHelp(Player *player, bool detailed = false, bool help = false);
         void IncreaseStat(Player *player, uint32 type);
         void ChangeModifier(Player *player, uint32 type);
         void ResetStats(Player *player);
