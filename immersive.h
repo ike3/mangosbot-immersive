@@ -49,12 +49,14 @@ namespace immersive
         uint32 GetStatsValue(uint32 owner, Stats type);
         void SetStatsValue(uint32 owner, Stats type, uint32 value);
         uint32 GetTotalStats(Player *player, uint8 level = 0);
+        void OnGoUse(Player *player, GameObject* obj);
 
     private:
         void PrintHelp(Player *player, bool detailed = false, bool help = false);
         void IncreaseStat(Player *player, uint32 type);
         void ChangeModifier(Player *player, uint32 type);
         void ResetStats(Player *player);
+        void CastPortal(Player *player);
         void SendMessage(Player *player, string message);
         uint32 CalculateEffectiveChanceDelta(const Unit* unit);
 

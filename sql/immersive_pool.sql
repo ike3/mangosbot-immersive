@@ -10,7 +10,7 @@ delete from pool_gameobject where description like 'Immersive%';
 drop table if exists immersive_pool;
 
 -- temp index
--- create index idx_pool_template_desc on pool_template(description);
+create index idx_pool_template_desc on pool_template(description);
 
 -- prepare chance data
 create table immersive_pool 
@@ -43,7 +43,6 @@ insert into immersive_pool (name, type, chance) values
 ('Arthas'' Tears', 1, 0),
 ('Sungrass', 1, 0),
 ('Blindweed', 1, 0),
-('Ghost Mushroom', 1, 0),
 ('Gromsblood', 1, 0),
 ('Golden Sansam', 1, 0),
 ('Dreamfoil', 1, 0),
@@ -158,7 +157,7 @@ insert into immersive_pool (name, type, chance) values
 
 update immersive_pool set divider = 200, max_limit = 1 where type = 1;
 update immersive_pool set divider = 100, max_limit = 1 where type = 2;
-update immersive_pool set divider = 300, max_limit = 1 where type = 3;
+update immersive_pool set divider = 75, max_limit = 1 where type = 3;
 update immersive_pool set divider = 200, max_limit = 5 where type = 4;
 update immersive_pool set divider = 150, max_limit = 5 where type = 5;
 

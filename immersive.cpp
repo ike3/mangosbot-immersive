@@ -120,6 +120,10 @@ void Immersive::OnGossipSelect(Player *player, uint32 gossipListId, GossipMenuIt
     case 19:
     case 20:
         ChangeModifier(player, menuData->m_gAction_poi - 11);
+        break;
+    case 40:
+        CastPortal(player);
+        break;
     }
 }
 
@@ -685,6 +689,36 @@ uint32 Immersive::CalculateEffectiveChanceDelta(const Unit* unit)
     }
 
     return 0;
+}
+
+void Immersive::CastPortal(Player *player)
+{
+    Group *group = player->GetGroup();
+    if (!group)
+    {
+        SendMessage(player, "|cffffa0a0You are not in a group");
+        return;
+    }
+
+    uint32 spellId = 23598; // meeting stone summoning
+    uint32 reagent = 17032; // rune of portals
+
+    if (!player->HasItemCount(reagent, 1))
+    {
+        SendMessage(player, "|cffffa0a0You do not have any runes of portals");
+        return;
+    }
+
+    player->DestroyItemCount(reagent, 1, true);
+    player->CastSpell(player, spellId, false);
+}
+
+void Immersive::OnGoUse(Player *player, GameObject* obj)
+{
+    if (obj && obj->GetGoType() == GAMEOBJECT_TYPE_MEETINGSTONE)
+    {
+        CastPortal(player);
+    }
 }
 
 INSTANTIATE_SINGLETON_1( immersive::Immersive );
