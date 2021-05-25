@@ -4,13 +4,15 @@ create table pool_template_backup as select * from pool_template;
 drop table if exists pool_gameobject_backup;
 create table pool_gameobject_backup as select * from pool_gameobject;
 
+drop table if exists immersive_tmp;
+
 -- cleanup
 delete from pool_template where description like 'Immersive%';
 delete from pool_gameobject where description like 'Immersive%';
 drop table if exists immersive_pool;
 
 -- temp index
-create index idx_pool_template_desc on pool_template(description);
+-- create index idx_pool_template_desc on pool_template(description);
 
 -- prepare chance data
 create table immersive_pool 
@@ -39,7 +41,7 @@ insert into immersive_pool (name, type, chance) values
 ('Stranglekelp', 1, 0),
 ('Goldthorn', 1, 0),
 ('Firebloom', 1, 0),
-('Purple Lotus', 1, 0),
+('Purple Lotus', 1, 5),
 ('Arthas'' Tears', 1, 0),
 ('Sungrass', 1, 0),
 ('Blindweed', 1, 0),
@@ -49,7 +51,7 @@ insert into immersive_pool (name, type, chance) values
 ('Mountain Silversage', 1, 0),
 ('Plaguebloom', 1, 0),
 ('Icecap', 1, 0),
-('Black Lotus', 1, 0),
+('Black Lotus', 1, 5),
 ('Bloodthistle', 1, 0),
 ('Felweed', 1, 0),
 ('Dreaming Glory', 1, 0),
@@ -135,7 +137,6 @@ insert into immersive_pool (name, type, chance) values
 ('Large Iron Bound Chest', 4, 0),
 ('Large Solid Chest', 4, 0),
 ('Large Battered Chest', 4, 0),
-('Buccaneer''s Strongbox', 4, 0),
 ('Large Mithril Bound Chest', 4, 0),
 ('Large Darkwood Chest', 4, 0),
 ('Fel Iron Chest', 4, 0),
@@ -146,20 +147,20 @@ insert into immersive_pool (name, type, chance) values
 -- 5 = Ore
 ('Copper Vein', 5, 0),
 ('Tin Vein', 5, 0),
-('Silver Vein', 5, 0),
+('Silver Vein', 5, 5),
 ('Iron Deposit', 5, 0),
-('Gold Vein', 5, 0),
+('Gold Vein', 5, 5),
 ('Mithril Deposit', 5, 0),
 ('Small Thorium Vein', 5, 0),
 ('Rich Thorium Vein', 5, 0),
-('Truesilver Vein', 5, 0)
+('Truesilver Vein', 5, 5)
 ;
 
-update immersive_pool set divider = 200, max_limit = 1 where type = 1;
+update immersive_pool set divider = 150, max_limit = 1 where type = 1;
 update immersive_pool set divider = 100, max_limit = 1 where type = 2;
 update immersive_pool set divider = 75, max_limit = 1 where type = 3;
-update immersive_pool set divider = 200, max_limit = 5 where type = 4;
-update immersive_pool set divider = 150, max_limit = 5 where type = 5;
+update immersive_pool set divider = 200, max_limit = 4 where type = 4;
+update immersive_pool set divider = 150, max_limit = 4 where type = 5;
 
 drop table if exists gameobject_tmp;
 create table gameobject_tmp as 
@@ -215,7 +216,7 @@ p.guid
 from pool_gameobject p
 where description like 'Immersive%' and chance = 0 and (select sum(chance) from pool_gameobject pg where pg.pool_entry = p.pool_entry) > 0;
 create index idx_immersive_tmp on immersive_tmp(guid);
-update pool_gameobject p set p.chance = ifnull((select chance from immersive_tmp where guid = p.guid),0)
+update pool_gameobject p set p.chance = ifnull((select abs(chance) from immersive_tmp where guid = p.guid),0)
 where p.description like 'Immersive%' and p.chance = 0;
 drop table immersive_tmp;
 
