@@ -438,7 +438,9 @@ bool ImmersiveAction::CheckSharedPercentReqsSingle(Player* player, Player* bot)
         return false;
 
     uint8 race1 = player->getRace();
+    uint8 cls1 = player->getClass();
     uint8 race2 = bot->getRace();
+    uint8 cls2 = bot->getClass();
 
     if (sImmersiveConfig.sharedPercentRaceRestiction == 2)
     {
@@ -449,7 +451,21 @@ bool ImmersiveAction::CheckSharedPercentReqsSingle(Player* player, Player* bot)
         if (race2 == RACE_DWARF) race2 = RACE_GNOME;
     }
 
+    if (sImmersiveConfig.sharedPercentClassRestiction == 2)
+    {
+        if (cls1 == CLASS_PALADIN || cls1 == CLASS_SHAMAN) cls1 = CLASS_WARRIOR;
+        if (cls1 == CLASS_HUNTER || cls1 == CLASS_ROGUE) cls1 = CLASS_DRUID;
+        if (cls1 == CLASS_PRIEST || cls1 == CLASS_WARLOCK) cls1 = CLASS_MAGE;
+
+        if (cls2 == CLASS_PALADIN || cls2 == CLASS_SHAMAN) cls2 = CLASS_WARRIOR;
+        if (cls2 == CLASS_HUNTER || cls2 == CLASS_ROGUE) cls2 = CLASS_DRUID;
+        if (cls2 == CLASS_PRIEST || cls2 == CLASS_WARLOCK) cls2 = CLASS_MAGE;
+    }
+
     if (sImmersiveConfig.sharedPercentRaceRestiction && race1 != race2)
+        return false;
+
+    if (sImmersiveConfig.sharedPercentClassRestiction && cls1 != cls2)
         return false;
 
     return true;
@@ -485,7 +501,7 @@ public:
 
     virtual bool Run(Player* player, Player* bot)
     {
-        if ((int)player->getLevel() - (int)bot->getLevel() <= sImmersiveConfig.sharedXpPercentLevelDiff)
+        if ((int)player->getLevel() - (int)bot->getLevel() < sImmersiveConfig.sharedXpPercentLevelDiff)
             return false;
 
         if (!CheckSharedPercentReqs(player, bot))

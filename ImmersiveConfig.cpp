@@ -27,7 +27,8 @@ bool ImmersiveConfig::Initialize()
     sharedRepPercent = config.GetFloatDefault("Immersive.SharedRepPercent", 90.0f);
     sharedQuests = config.GetBoolDefault("Immersive.SharedQuests", true);
     fishingBaubles = config.GetBoolDefault("Immersive.FishingBaubles", true);
-    sharedPercentRaceRestiction = config.GetIntDefault("Immersive.SharedPercentRaceRestriction", 2);
+    sharedPercentRaceRestiction = config.GetIntDefault("Immersive.SharedPercentRaceRestriction", 0);
+    sharedPercentClassRestiction = config.GetIntDefault("Immersive.SharedPercentClassRestriction", 0);
     sharedPercentMinLevel = config.GetFloatDefault("Immersive.SharedPercentMinLevel", 5);
     attributeLossPerDeath = config.GetIntDefault("Immersive.AttributeLossPerDeath", 1);
     fallDamageMultiplier = config.GetFloatDefault("Immersive.FallDamageMultiplier", 1);
