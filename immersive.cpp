@@ -707,7 +707,7 @@ uint32 Immersive::CalculateEffectiveChanceDelta(const Unit* unit)
     return 0;
 }
 
-void Immersive::CastPortal(Player *player)
+void Immersive::CastPortal(Player *player, bool meetingStone)
 {
     Group *group = player->GetGroup();
     if (!group)
@@ -719,13 +719,17 @@ void Immersive::CastPortal(Player *player)
     uint32 spellId = 23598; // meeting stone summoning
     uint32 reagent = 17032; // rune of portals
 
-    if (!player->HasItemCount(reagent, 1))
+    if (!meetingStone)
     {
-        SendMessage(player, "|cffffa0a0You do not have any runes of portals");
-        return;
+        if (!player->HasItemCount(reagent, 1))
+        {
+            SendMessage(player, "|cffffa0a0You do not have any runes of portals");
+            return;
+        }
+
+        player->DestroyItemCount(reagent, 1, true);
     }
 
-    player->DestroyItemCount(reagent, 1, true);
     player->CastSpell(player, spellId, false);
 }
 
@@ -733,7 +737,7 @@ void Immersive::OnGoUse(Player *player, GameObject* obj)
 {
     if (obj && obj->GetGoType() == GAMEOBJECT_TYPE_MEETINGSTONE)
     {
-        CastPortal(player);
+        CastPortal(player, true);
     }
 }
 
@@ -758,6 +762,15 @@ void Immersive::OnGossipHello(Player* player, Creature* creature)
     }
 
 #endif
+}
+
+void Immersive::CheckScaleChange(Player* player)
+{
+    uint8 race = player->getRace();
+    if (race == RACE_TROLL || race == RACE_NIGHTELF)
+    {
+        player->SetObjectScale(0.85f);
+    }
 }
 
 INSTANTIATE_SINGLETON_1( immersive::Immersive );

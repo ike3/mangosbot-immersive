@@ -51,13 +51,14 @@ namespace immersive
         uint32 GetTotalStats(Player *player, uint8 level = 0);
         void OnGoUse(Player *player, GameObject* obj);
         void OnGossipHello(Player* player, Creature* creature);
+        void CheckScaleChange(Player* player);
 
     private:
         void PrintHelp(Player *player, bool detailed = false, bool help = false);
         void IncreaseStat(Player *player, uint32 type);
         void ChangeModifier(Player *player, uint32 type);
         void ResetStats(Player *player);
-        void CastPortal(Player *player);
+        void CastPortal(Player *player, bool meetingStone = false);
         void SendMessage(Player *player, string message);
         uint32 CalculateEffectiveChanceDelta(const Unit* unit);
 
