@@ -51,7 +51,6 @@ insert into immersive_pool (name, type, chance) values
 ('Mountain Silversage', 1, 0),
 ('Plaguebloom', 1, 0),
 ('Icecap', 1, 0),
-('Black Lotus', 1, 5),
 ('Bloodthistle', 1, 0),
 ('Felweed', 1, 0),
 ('Dreaming Glory', 1, 0),
@@ -100,12 +99,6 @@ insert into immersive_pool (name, type, chance) values
 ('Bloodpetal Sprout', 3, 0),
 ('Blood of Heroes', 3, 0),
 ('Shellfish Trap', 3, 0),
-('Practice Lockbox', 3, 0),
-('Battered Footlocker', 3, 0),
-('Waterlogged Footlocker', 3, 0),
-('Dented Footlocker', 3, 0),
-('Mossy Footlocker', 3, 0),
-('Scarlet Footlocker', 3, 0),
 ('Burial Chest', 3, 0),
 ('Glowcap', 3, 0),
 ('Wicker Chest', 3, 0),
@@ -147,20 +140,24 @@ insert into immersive_pool (name, type, chance) values
 -- 5 = Ore
 ('Copper Vein', 5, 0),
 ('Tin Vein', 5, 0),
-('Silver Vein', 5, 5),
 ('Iron Deposit', 5, 0),
-('Gold Vein', 5, 5),
 ('Mithril Deposit', 5, 0),
 ('Small Thorium Vein', 5, 0),
 ('Rich Thorium Vein', 5, 0),
-('Truesilver Vein', 5, 5)
+
+-- 6 = Rares
+('Silver Vein', 6, 5),
+('Gold Vein', 6, 5),
+('Truesilver Vein', 6, 5),
+('Black Lotus', 6, 5)
 ;
 
 update immersive_pool set divider = 150, max_limit = 1 where type = 1;
 update immersive_pool set divider = 100, max_limit = 1 where type = 2;
 update immersive_pool set divider = 75, max_limit = 1 where type = 3;
-update immersive_pool set divider = 200, max_limit = 4 where type = 4;
+update immersive_pool set divider = 100, max_limit = 1 where type = 4;
 update immersive_pool set divider = 150, max_limit = 4 where type = 5;
+update immersive_pool set divider = 150, max_limit = 1 where type = 6;
 
 drop table if exists gameobject_tmp;
 create table gameobject_tmp as 
