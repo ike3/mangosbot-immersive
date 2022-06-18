@@ -124,6 +124,9 @@ void Immersive::OnGossipSelect(Player *player, uint32 gossipListId, GossipMenuIt
     case 40:
         CastPortal(player);
         break;
+    case 41:
+        CastPortal(player, true);
+        break;
     }
 }
 
@@ -764,12 +767,22 @@ void Immersive::OnGossipHello(Player* player, Creature* creature)
 #endif
 }
 
+map<uint8,float> scale;
 void Immersive::CheckScaleChange(Player* player)
 {
     uint8 race = player->getRace();
-    if (race == RACE_TROLL || race == RACE_NIGHTELF)
+    if (scale.empty())
     {
-        player->SetObjectScale(0.85f);
+        scale[RACE_TROLL] = 0.85f;
+        scale[RACE_NIGHTELF] = 0.85f;
+        scale[RACE_ORC] = 0.95f;
+        scale[RACE_TAUREN] = 0.95f;
+        scale[RACE_HUMAN] = 1.0f;
+    }
+
+    if (scale.find(race) != scale.end())
+    {
+        player->SetObjectScale(scale[race] - (player->getGender() == GENDER_MALE ? 0.1f : 0));
     }
 }
 
