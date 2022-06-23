@@ -283,13 +283,13 @@ void Immersive::IncreaseStat(Player *player, uint32 type)
     }
 
     uint32 value = GetStatsValue(owner, (Stats)type);
-    SetStatsValue(owner, (Stats)type, value + 1);
+    SetStatsValue(owner, (Stats)type, value + sImmersiveConfig.manualAttributesIncrease);
 
     usedStats = GetUsedStats(player);
     totalStats = GetTotalStats(player);
     cost = GetStatCost(player);
     ostringstream out;
-    out << "|cffa0a0ffYou have gained |cff00ff00+1|cffa0a0ff " << statNames[(Stats)type].c_str() <<
+    out << "|cffa0a0ffYou have gained |cff00ff00+" << sImmersiveConfig.manualAttributesIncrease << "|cffa0a0ff " << statNames[(Stats)type].c_str() <<
             ", |cff00ff00" << (totalStats - usedStats) << "|cffa0a0ff points left (|cffffff00" << formatMoney(cost) << "|cffa0a0ff per use)";
     SendMessage(player, out.str());
 
@@ -328,7 +328,8 @@ uint32 Immersive::GetTotalStats(Player *player, uint8 level)
     {
         total += ((int)levelCInfo.stats[i] - (int)level1Info.stats[i]);
     }
-    return (uint32)floor(total * sImmersiveConfig.manualAttributesPercent / 100.0f);
+    uint32 byPercent = (uint32)floor(total * sImmersiveConfig.manualAttributesPercent / 100.0f);
+    return byPercent / sImmersiveConfig.manualAttributesIncrease * sImmersiveConfig.manualAttributesIncrease;
 }
 
 uint32 Immersive::GetUsedStats(Player *player)
@@ -354,7 +355,7 @@ uint32 Immersive::GetStatCost(Player *player)
             break;
         }
     }
-    return 10 * (usedLevels * usedLevels + 1);
+    return 10 * (usedLevels * usedLevels + 1) * sImmersiveConfig.manualAttributesIncrease;
 }
 
 uint32 Immersive::GetValue(uint32 owner, string type)

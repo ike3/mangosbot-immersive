@@ -1,6 +1,6 @@
-delete FROM mangos_zero_world.autobroadcast;
+delete FROM autobroadcast;
 
-INSERT INTO `mangos_zero_world`.`autobroadcast` (`content`, `ratio`)
+INSERT INTO `autobroadcast` (`content`, `ratio`)
 VALUES
 ('Nearby questgivers that are awaiting your return are shown as a mark on your mini-map.',1),
 ('Your spell casting can be cancelled by moving, jumping or hitting the escape key.',1),

@@ -23,6 +23,7 @@ bool ImmersiveConfig::Initialize()
     serverPort = config.GetIntDefault("Immersive.ServerPort", 0);
     manualAttributes = config.GetBoolDefault("Immersive.ManualAttributes", true);
     manualAttributesPercent = config.GetFloatDefault("Immersive.ManualAttributesPercent", 80.0f);
+    manualAttributesIncrease = config.GetFloatDefault("Immersive.ManualAttributesIncrease", 5);
     sharedXpPercent = config.GetFloatDefault("Immersive.SharedXpPercent", 90.0f);
     sharedRepPercent = config.GetFloatDefault("Immersive.SharedRepPercent", 90.0f);
     sharedQuests = config.GetBoolDefault("Immersive.SharedQuests", true);

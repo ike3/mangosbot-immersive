@@ -24,23 +24,23 @@ INSERT INTO `gossip_menu_option`
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 1, 3, '+1 Strength', 18, 16, 0, 1, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 1, 3, 'Improve Strength', 18, 16, 0, 1, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 2, 3, '+1 Agility', 18, 16, 0, 2, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 2, 3, 'Improve Agility', 18, 16, 0, 2, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 3, 3, '+1 Stamina', 18, 16, 0, 3, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 3, 3, 'Improve Stamina', 18, 16, 0, 3, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 4, 3, '+1 Intellect', 18, 16, 0, 4, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 4, 3, 'Improve Intellect', 18, 16, 0, 4, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 5, 3, '+1 Spirit', 18, 16, 0, 5, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 5, 3, 'Improve Spirit', 18, 16, 0, 5, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
