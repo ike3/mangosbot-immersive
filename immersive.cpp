@@ -64,8 +64,6 @@ Immersive::Immersive()
     statNames[STAT_STAMINA] = "STA";
     statNames[STAT_INTELLECT] = "INT";
     statNames[STAT_SPIRIT] = "SPI";
-
-    sImmersiveConfig.Initialize();
 }
 
 void Immersive::GetPlayerLevelInfo(Player *player, PlayerLevelInfo* info)
@@ -771,6 +769,8 @@ void Immersive::OnGossipHello(Player* player, Creature* creature)
 map<uint8,float> scale;
 void Immersive::CheckScaleChange(Player* player)
 {
+    if (!sImmersiveConfig.scaleModifierWorkaround) return;
+
     uint8 race = player->getRace();
     if (scale.empty())
     {

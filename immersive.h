@@ -1,5 +1,6 @@
 #pragma once
 #include "GossipDef.h"
+#include "ImmersiveConfig.h"
 
 using namespace std;
 
