@@ -285,10 +285,10 @@ void Immersive::IncreaseStat(Player *player, uint32 type)
 
     usedStats = GetUsedStats(player);
     totalStats = GetTotalStats(player);
-    cost = GetStatCost(player);
+    uint32 nextCost = GetStatCost(player);
     ostringstream out;
     out << "|cffa0a0ffYou have gained |cff00ff00+" << sImmersiveConfig.manualAttributesIncrease << "|cffa0a0ff " << statNames[(Stats)type].c_str() <<
-            ", |cff00ff00" << (totalStats - usedStats) << "|cffa0a0ff points left (|cffffff00" << formatMoney(cost) << "|cffa0a0ff per use)";
+            ", |cff00ff00" << (totalStats - usedStats) << "|cffa0a0ff points left (|cffffff00" << formatMoney(nextCost) << "|cffa0a0ff per use)";
     SendMessage(player, out.str());
 
     player->InitStatsForLevel(true);
