@@ -444,6 +444,9 @@ bool ImmersiveAction::CheckSharedPercentReqsSingle(Player* player, Player* bot)
     uint8 race2 = bot->getRace();
     uint8 cls2 = bot->getClass();
 
+    if (sImmersiveConfig.sharedPercentGuildRestiction && player->GetGuildId() != bot->GetGuildId())
+        return false;
+
     if (sImmersiveConfig.sharedPercentRaceRestiction == 2)
     {
         if (race1 == RACE_TROLL) race1 = RACE_ORC;
@@ -779,6 +782,8 @@ void Immersive::CheckScaleChange(Player* player)
         scale[RACE_ORC] = 0.95f;
         scale[RACE_TAUREN] = 0.95f;
         scale[RACE_HUMAN] = 1.0f;
+        scale[RACE_DWARF] = 0.85f;
+        scale[RACE_GNOME] = 1.15f;
     }
 
     if (scale.find(race) != scale.end())

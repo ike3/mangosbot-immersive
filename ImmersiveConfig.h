@@ -25,6 +25,7 @@ public:
     bool fishingBaubles;
     int sharedPercentRaceRestiction;
     int sharedPercentClassRestiction;
+    int sharedPercentGuildRestiction;
     float sharedPercentMinLevel;
     int attributeLossPerDeath;
     float fallDamageMultiplier;
