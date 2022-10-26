@@ -42,6 +42,7 @@ namespace immersive
         float GetFallDamage(float zdist);
         void OnDeath(Player *player);
         void OnGiveXP(Player *player, uint32 xp, Unit* victim);
+        void OnModifyMoney(Player *player, int32 delta);
         void OnReputationChange(Player* player, FactionEntry const* factionEntry, int32& standing, bool incremental);
         void OnRewardQuest(Player* player, Quest const* quest);
         bool OnFishing(Player* player, bool success);

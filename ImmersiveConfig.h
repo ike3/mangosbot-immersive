@@ -20,6 +20,7 @@ public:
     float manualAttributesPercent;
     int manualAttributesIncrease;
     float sharedXpPercent;
+    float sharedMoneyPercent;
     float sharedRepPercent;
     bool sharedQuests;
     bool fishingBaubles;

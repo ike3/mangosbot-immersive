@@ -1,13 +1,15 @@
 #include "immersivepch.h"
 #include "immersive.h"
 
-#include "../Bots/playerbot/ServerFacade.h"
 #include "SharedDefines.h"
 #include "ImmersiveConfig.h"
 
+
 #ifdef ENABLE_PLAYERBOTS
+#include "../Bots/playerbot/ServerFacade.h"
 #include "../Bots/playerbot/PlayerbotAIConfig.h"
 #include "../Bots/playerbot/PlayerbotAI.h"
+#include "../Bots/playerbot/ChatHelper.h"
 #endif
 
 using namespace immersive;
@@ -542,6 +544,52 @@ void Immersive::OnGiveXP(Player *player, uint32 xp, Unit* victim)
     if (botXp < 1) return;
 
     OnGiveXPAction action(botXp);
+    RunAction(player, &action);
+}
+
+class OnGiveMoneyAction : public ImmersiveAction
+{
+public:
+    OnGiveMoneyAction(int32 value) : ImmersiveAction(), value(value) {}
+
+    virtual bool Run(Player* player, Player* bot)
+    {
+        if ((int)player->getLevel() - (int)bot->getLevel() < sImmersiveConfig.sharedXpPercentLevelDiff)
+            return false;
+
+        if (!CheckSharedPercentReqs(player, bot))
+            return false;
+
+        bot->ModifyMoney(value);
+        return true;
+    }
+
+    virtual string GetMessage()
+    {
+        ostringstream out;
+        out <<
+#ifdef ENABLE_PLAYERBOTS
+            ai::ChatHelper::formatMoney(value)
+#else
+            value << "c"
+#endif
+            << " gained";
+        return out.str();
+    }
+
+private:
+    int32 value;
+};
+
+void Immersive::OnModifyMoney(Player *player, int32 delta)
+{
+    if (delta < 1) return;
+    if (sImmersiveConfig.sharedMoneyPercent < 0.01f || !player->GetPlayerbotMgr()) return;
+
+    int32 botMoney = (int32) (delta * sImmersiveConfig.sharedMoneyPercent / 100.0f);
+    if (botMoney < 1) return;
+
+    OnGiveMoneyAction action(botMoney);
     RunAction(player, &action);
 }
 
