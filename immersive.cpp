@@ -447,6 +447,9 @@ bool ImmersiveAction::CheckSharedPercentReqsSingle(Player* player, Player* bot)
     if (sImmersiveConfig.sharedPercentGuildRestiction && player->GetGuildId() != bot->GetGuildId())
         return false;
 
+    if (sImmersiveConfig.sharedPercentFactionRestiction && (IsAlliance(player->getRace()) ^ IsAlliance(bot->getRace())))
+        return false;
+
     if (sImmersiveConfig.sharedPercentRaceRestiction == 2)
     {
         if (race1 == RACE_TROLL) race1 = RACE_ORC;

@@ -26,6 +26,7 @@ public:
     int sharedPercentRaceRestiction;
     int sharedPercentClassRestiction;
     int sharedPercentGuildRestiction;
+    int sharedPercentFactionRestiction;
     float sharedPercentMinLevel;
     int attributeLossPerDeath;
     float fallDamageMultiplier;
