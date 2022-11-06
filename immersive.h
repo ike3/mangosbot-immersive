@@ -66,7 +66,7 @@ namespace immersive
 
     private:
         uint32 GetUsedStats(Player *player);
-        uint32 GetStatCost(Player *player);
+        uint32 GetStatCost(Player *player, uint8 level = 0, uint32 usedStats = 0);
 
     private:
         void RunAction(Player* player, ImmersiveAction* action);

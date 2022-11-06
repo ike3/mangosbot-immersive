@@ -202,6 +202,17 @@ void Immersive::PrintHelp(Player *player, bool detailed, bool help)
             "|cffa0a0ff (|cffffff00" << formatMoney(cost) << "|cffa0a0ff per use)";
     SendMessage(player, out.str());
 
+    /*for (int8 level = 1; level <= 80; level++)
+    {
+        uint32 nextLvlTotalStats = GetTotalStats(player, level);
+        uint32 nextLvlCost = GetStatCost(player, level, nextLvlTotalStats);
+        ostringstream out;
+        out << "|cffa0a0ffLevel: |cff00ff00" << (uint32)level <<
+                "|cffa0a0ffAvailable: |cff00ff00" << (uint32)nextLvlTotalStats <<
+                "|cffa0a0ff (|cffffff00" << formatMoney(nextLvlCost) << "|cffa0a0ff per use)";
+        SendMessage(player, out.str());
+    }*/
+
     if (detailed)
     {
         ostringstream out;
@@ -343,15 +354,16 @@ uint32 Immersive::GetUsedStats(Player *player)
     return usedStats;
 }
 
-uint32 Immersive::GetStatCost(Player *player)
+uint32 Immersive::GetStatCost(Player *player, uint8 level, uint32 usedStats)
 {
-    uint32 usedStats = GetUsedStats(player);
+    if (!level) level = player->getLevel();
+    if (!usedStats) usedStats = GetUsedStats(player);
     uint32 usedLevels = usedStats / 5;
-    for (uint8 level = player->getLevel(); level >= 1 ; level--)
+    for (int8 i = level; i >= 1; i--)
     {
-        uint32 forLevel = GetTotalStats(player, level);
-        if (usedStats >= forLevel) {
-            usedLevels = level;
+        uint32 forLevel = GetTotalStats(player, i);
+        if (usedStats > forLevel) {
+            usedLevels = i - 1;
             break;
         }
     }
