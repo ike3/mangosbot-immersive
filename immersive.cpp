@@ -784,7 +784,16 @@ void Immersive::CastPortal(Player *player, bool meetingStone)
         return;
     }
 
-    uint32 spellId = 23598; // meeting stone summoning
+    uint32 spellId =
+#ifdef MANGOSBOT_ZERO
+            23598; // meeting stone summoning
+#endif
+#ifdef MANGOSBOT_ONE
+            23598; // meeting stone summoning
+#endif
+#ifdef MANGOSBOT_TWO
+            61994; // meeting stone summoning
+#endif
     uint32 reagent = 17032; // rune of portals
 
     if (!meetingStone)
