@@ -68,6 +68,26 @@ Immersive::Immersive()
     statNames[STAT_SPIRIT] = "SPI";
 }
 
+PlayerInfo extraPlayerInfo[MAX_RACES][MAX_CLASSES];
+
+PlayerInfo const* Immersive::GetPlayerInfo(uint32 race, uint32 class_)
+{
+    if (class_ == CLASS_SHAMAN && race == RACE_NIGHTELF)
+    {
+        PlayerInfo const* piSh = sObjectMgr.GetPlayerInfo(RACE_DRAENEI, class_);
+        PlayerInfo *result = &extraPlayerInfo[race][class_];
+        memcpy(result, piSh, sizeof(PlayerInfo));
+
+        PlayerInfo const* piDr = sObjectMgr.GetPlayerInfo(race, CLASS_DRUID);
+        result->displayId_f = piDr->displayId_f;
+        result->displayId_m = piDr->displayId_m;
+
+        return result;
+    }
+
+    return sObjectMgr.GetPlayerInfo(race, class_);
+}
+
 void Immersive::GetPlayerLevelInfo(Player *player, PlayerLevelInfo* info)
 {
     if (!sImmersiveConfig.manualAttributes) return;
@@ -81,7 +101,7 @@ void Immersive::GetPlayerLevelInfo(Player *player, PlayerLevelInfo* info)
     }
 #endif
 
-    PlayerInfo const* playerInfo = sObjectMgr.GetPlayerInfo(player->getRace(), player->getClass());
+    PlayerInfo const* playerInfo = GetPlayerInfo(player->getRace(), player->getClass());
     *info = playerInfo->levelInfo[0];
 
     uint32 owner = player->GetObjectGuid().GetRawValue();
@@ -238,7 +258,7 @@ void Immersive::PrintHelp(Player *player, bool detailed, bool help)
     {
         ostringstream out;
         out << "|cffa0a0ffDefault: ";
-        PlayerInfo const* info = sObjectMgr.GetPlayerInfo(player->getRace(), player->getClass());
+        PlayerInfo const* info = GetPlayerInfo(player->getRace(), player->getClass());
         PlayerLevelInfo level1Info = info->levelInfo[0];
         uint8 level = player->getLevel();
         PlayerLevelInfo levelCInfo = info->levelInfo[level - 1];
@@ -330,7 +350,7 @@ void Immersive::ResetStats(Player *player)
 
 uint32 Immersive::GetTotalStats(Player *player, uint8 level)
 {
-    PlayerInfo const* info = sObjectMgr.GetPlayerInfo(player->getRace(), player->getClass());
+    PlayerInfo const* info = GetPlayerInfo(player->getRace(), player->getClass());
     PlayerLevelInfo level1Info = info->levelInfo[0];
     if (!level) level = player->getLevel();
     PlayerLevelInfo levelCInfo = info->levelInfo[level - 1];

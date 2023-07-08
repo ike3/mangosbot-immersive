@@ -37,6 +37,7 @@ namespace immersive
         Immersive();
 
     public:
+        PlayerInfo const* GetPlayerInfo(uint32 race, uint32 class_);
         void GetPlayerLevelInfo(Player *player, PlayerLevelInfo* info);
         void OnGossipSelect(Player *player, uint32 gossipListId, GossipMenuItemData *menuData);
         float GetFallDamage(float zdist);
