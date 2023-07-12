@@ -33,6 +33,7 @@ public:
     float fallDamageMultiplier;
     int sharedXpPercentLevelDiff;
     bool scaleModifierWorkaround;
+    int sharedRandomPercent;
 
 private:
     Config config;

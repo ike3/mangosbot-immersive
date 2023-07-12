@@ -536,6 +536,14 @@ void Immersive::RunAction(Player* player, ImmersiveAction* action)
     SendMessage(player, out.str());
 }
 
+uint32 ApplyRandomPercent(uint32 value)
+{
+    if (!sImmersiveConfig.sharedRandomPercent) return value;
+
+    float percent = (float) urand(0, sImmersiveConfig.sharedRandomPercent) - (float) sImmersiveConfig.sharedRandomPercent / 2;
+    return value + (uint32) (value * percent / 100.0f);
+}
+
 class OnGiveXPAction : public ImmersiveAction
 {
 public:
@@ -549,10 +557,10 @@ public:
         if (!CheckSharedPercentReqs(player, bot))
             return false;
 
-        bot->GiveXP(value, NULL);
+        bot->GiveXP(ApplyRandomPercent(value), NULL);
         Pet *pet = bot->GetPet();
         if (pet && pet->getPetType() == HUNTER_PET)
-            pet->GivePetXP(value);
+            pet->GivePetXP(ApplyRandomPercent(value));
         return true;
     }
 
@@ -592,7 +600,7 @@ public:
         if (!CheckSharedPercentReqs(player, bot))
             return false;
 
-        bot->ModifyMoney(value);
+        bot->ModifyMoney(ApplyRandomPercent(value));
         return true;
     }
 
@@ -635,7 +643,7 @@ public:
         if (!CheckSharedPercentReqs(player, bot))
             return false;
 
-        bot->GetReputationMgr().ModifyReputation(factionEntry, value);
+        bot->GetReputationMgr().ModifyReputation(factionEntry, ApplyRandomPercent(value));
         return true;
     }
 
