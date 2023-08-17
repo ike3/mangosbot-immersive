@@ -72,6 +72,7 @@ PlayerInfo extraPlayerInfo[MAX_RACES][MAX_CLASSES];
 
 PlayerInfo const* Immersive::GetPlayerInfo(uint32 race, uint32 class_)
 {
+#ifndef MANGOSBOT_ZERO
     if (class_ == CLASS_SHAMAN && race == RACE_NIGHTELF)
     {
         PlayerInfo const* piSh = sObjectMgr.GetPlayerInfo(RACE_DRAENEI, class_);
@@ -79,6 +80,20 @@ PlayerInfo const* Immersive::GetPlayerInfo(uint32 race, uint32 class_)
         memcpy(result, piSh, sizeof(PlayerInfo));
 
         PlayerInfo const* piDr = sObjectMgr.GetPlayerInfo(race, CLASS_DRUID);
+        result->displayId_f = piDr->displayId_f;
+        result->displayId_m = piDr->displayId_m;
+
+        return result;
+    }
+#endif
+
+    if (class_ == CLASS_DRUID && race == RACE_TROLL)
+    {
+        PlayerInfo const* piSh = sObjectMgr.GetPlayerInfo(RACE_TAUREN, class_);
+        PlayerInfo *result = &extraPlayerInfo[race][class_];
+        memcpy(result, piSh, sizeof(PlayerInfo));
+
+        PlayerInfo const* piDr = sObjectMgr.GetPlayerInfo(race, CLASS_SHAMAN);
         result->displayId_f = piDr->displayId_f;
         result->displayId_m = piDr->displayId_m;
 
