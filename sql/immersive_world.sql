@@ -1,6 +1,6 @@
 -- backup
 drop table if exists creature_template_backup;
-create table creature_template_backup ;
+create table creature_template_backup
 SELECT * FROM creature_template where TrainerTemplateId <> 0 and TrainerClass <> 0 and GossipMenuId = 0;
 
 -- cleanup
@@ -20,27 +20,27 @@ VALUES (60003, 1, 0, 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 0, 7, 'Help', 19, 16, 0, 0, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 0, 7, 'Help', 18, 16, 0, 0, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 1, 3, 'Improve Strength', 19, 16, 0, 1, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 1, 3, 'Improve Strength', 18, 16, 0, 1, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 2, 3, 'Improve Agility', 19, 16, 0, 2, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 2, 3, 'Improve Agility', 18, 16, 0, 2, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 3, 3, 'Improve Stamina', 19, 16, 0, 3, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 3, 3, 'Improve Stamina', 18, 16, 0, 3, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 4, 3, 'Improve Intellect', 19, 16, 0, 4, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 4, 3, 'Improve Intellect', 18, 16, 0, 4, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60001, 5, 3, 'Improve Spirit', 19, 16, 0, 5, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60001, 5, 3, 'Improve Spirit', 18, 16, 0, 5, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
@@ -48,7 +48,7 @@ INSERT INTO `gossip_menu_option`
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60002, 6, 4, 'I am sure I do want to unlearn all attributes', 19, 16, 0, 6, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60002, 6, 4, 'I am sure I do want to unlearn all attributes', 18, 16, 0, 6, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
@@ -56,31 +56,31 @@ INSERT INTO `gossip_menu_option`
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60003, 11, 3, 'Disable', 19, 16, 0, 11, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 11, 3, 'Disable', 18, 16, 0, 11, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60003, 12, 3, 'Reduce by 90%', 19, 16, 0, 12, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 12, 3, 'Reduce by 90%', 18, 16, 0, 12, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60003, 14, 3, 'Reduce by 70%', 19, 16, 0, 14, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 14, 3, 'Reduce by 70%', 18, 16, 0, 14, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60003, 16, 3, 'Reduce by 50%', 19, 16, 0, 16, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 16, 3, 'Reduce by 50%', 18, 16, 0, 16, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60003, 19, 3, 'Reduce by 30%', 19, 16, 0, 19, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 17, 3, 'Reduce by 30%', 18, 16, 0, 18, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60003, 19, 3, 'Reduce by 20%', 19, 16, 0, 19, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 18, 3, 'Reduce by 20%', 18, 16, 0, 18, 0, 0, 0, '', 0);
 
 INSERT INTO `gossip_menu_option`
 (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`,
-`box_money`, `box_text`, `condition_id`) VALUES (60003, 20, 3, 'Reduce by 10%', 19, 16, 0, 20, 0, 0, 0, '', 0);
+`box_money`, `box_text`, `condition_id`) VALUES (60003, 19, 3, 'Reduce by 10%', 18, 16, 0, 20, 0, 0, 0, '', 0);
 
 -- add to trainers
 INSERT INTO `gossip_menu_option`
