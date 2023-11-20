@@ -34,6 +34,7 @@ public:
     int sharedXpPercentLevelDiff;
     bool scaleModifierWorkaround;
     int sharedRandomPercent;
+    float pauseRange;
 
 private:
     Config config;

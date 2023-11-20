@@ -4,6 +4,12 @@
 #include "SharedDefines.h"
 #include "ImmersiveConfig.h"
 
+#include "GridNotifiers.h"
+#include "GridNotifiersImpl.h"
+#include "CellImpl.h"
+
+using namespace MaNGOS;
+
 
 #ifdef ENABLE_PLAYERBOTS
 #include "../Bots/playerbot/ServerFacade.h"
@@ -905,6 +911,92 @@ void Immersive::CheckScaleChange(Player* player)
     {
         player->SetObjectScale(scale[race] - (player->getGender() == GENDER_MALE ? 0.1f : 0));
     }
+}
+
+bool ChatHandler::HandleImmersiveCommand(char* args)
+{
+    WorldSession *m_session = this->GetSession();
+    if (!m_session) return false;
+
+    Player* player = m_session->GetPlayer();
+    if (!args) return false;
+    
+    if (!strcmp(args, "pause"))
+    {
+        sImmersive.OnPause(player, 29826);
+    }
+}
+
+void Immersive::OnPause(Player *player, uint32 spellId)
+{
+    float range = sImmersiveConfig.pauseRange;
+    if (range < 0.1f)
+    {
+        SendMessage("pause/resume system is disabled");
+        return;
+    }
+    
+    SpellEntry const* spellInfo = sSpellStore.LookupEntry(spellId);
+    if (!spellInfo) 
+    {
+        sLog.outError("PAUSE: Invalid spellId %u", spellId);
+        return;
+    }
+    
+    bool paused = IsPaused(player, spellId);
+
+    list<Unit*> targets;
+    MaNGOS::AnyUnitInObjectRangeCheck u_check(player, range);
+    MaNGOS::UnitListSearcher<MaNGOS::AnyUnitInObjectRangeCheck> searcher(targets, u_check);
+    Cell::VisitAllObjects(player, searcher, range);
+
+    for (list<Unit*>::iterator i = targets.begin(); i != targets.end(); ++i)
+    {
+        Unit* unit = *i;
+        if (!unit) continue;
+        if (paused) ResumeUnit(unit, spellId); 
+        else PauseUnit(unit, spellInfo);
+    }
+    
+    ostringstream out;
+    out << "|cffa0a0ffThe game is: " << (!paused ? "|cffff0000PAUSED" : "|cff00ff00RESUMED");
+    SendMessage(player, out.str());
+}
+
+void Immersive::PauseUnit(Unit *unit, SpellEntry const* spellInfo)
+{
+    SpellAuraHolder* holder = CreateSpellAuraHolder(spellInfo, unit, unit);
+
+    Aura* aur = CreateAura(spellInfo, SpellEffectIndex(0), NULL, holder, unit);
+    holder->AddAura(aur, SpellEffectIndex(0));
+    unit->AddSpellAuraHolder(holder);
+}
+
+void Immersive::ResumeUnit(Unit *unit, uint32 spellId)
+{
+    for (uint32 effect = EFFECT_INDEX_0; effect <= EFFECT_INDEX_2; effect++)
+    {
+        Aura* aura = ((Unit*)unit)->GetAura(spellId, (SpellEffectIndex)effect);
+        if (aura)
+        {
+            unit->RemoveAura(aura);
+        }
+    }
+    if (!unit->IsInCombat())
+    {
+        unit->GetMotionMaster()->MoveIdle();
+    }
+}
+
+bool Immersive::IsPaused(Unit *unit, uint32 spellId)
+{
+    for (uint32 effect = EFFECT_INDEX_0; effect <= EFFECT_INDEX_2; effect++)
+    {
+        Aura* aura = ((Unit*)unit)->GetAura(spellId, (SpellEffectIndex)effect);
+        if (aura) return true;
+    }
+    
+    return false;
 }
 
 INSTANTIATE_SINGLETON_1( immersive::Immersive );

@@ -39,6 +39,7 @@ bool ImmersiveConfig::Initialize()
     sharedXpPercentLevelDiff = config.GetIntDefault("Immersive.SharedXpPercentLevelDiff", 0);
     scaleModifierWorkaround = config.GetBoolDefault("Immersive.ScaleModifierWorkaround", false);
     sharedRandomPercent = config.GetIntDefault("Immersive.SharedRandomPercent", 20);
+    pauseRange = config.GetFloatDefault("Immersive.PauseRange", 0.0f);
 
     sLog.outString("Immersive configuration loaded");
     return true;

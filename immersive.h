@@ -55,6 +55,7 @@ namespace immersive
         void OnGoUse(Player *player, GameObject* obj);
         void OnGossipHello(Player* player, Creature* creature);
         void CheckScaleChange(Player* player);
+        void OnPause(Player *player, uint32 spellId);
 
     private:
         void PrintHelp(Player *player, bool detailed = false, bool help = false);
@@ -64,6 +65,9 @@ namespace immersive
         void CastPortal(Player *player, bool meetingStone = false);
         void SendMessage(Player *player, string message);
         uint32 CalculateEffectiveChanceDelta(const Unit* unit);
+        bool IsPaused(Unit *unit, uint32 spellId);
+        void PauseUnit(Unit *unit, SpellEntry const* spellInfo);
+        void ResumeUnit(Unit *unit, uint32 spellId);
 
     private:
         uint32 GetUsedStats(Player *player);
